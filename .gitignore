@@ -24,5 +24,4 @@ dist-ssr
 *.sw?
 
 .env
-__generated__
 .DS_Store
