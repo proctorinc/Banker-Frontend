@@ -8,7 +8,6 @@ Banker is a GraphQL banking API for fetching bank account and transaction data a
 - graphql-codegen > GraphQL code generation (https://github.com/dotansimha/graphql-code-generator)
 - tailwindcss > A utility-first CSS framework for rapidly building custom user interfaces. (https://github.com/tailwindlabs/tailwindcss)
 
-
 ## Development
 To generate GQL files:
 Compile once:
