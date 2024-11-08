@@ -1,41 +1,27 @@
-// Import everything needed to use the `useQuery` hook
-import { useQuery, gql } from "@apollo/client";
-
-const GET_LOCATIONS = gql`
-  query GetLocations {
-    locations {
-      id
-      name
-      description
-      photo
-    }
-  }
-`;
-
-function DisplayLocations() {
-  const { loading, error, data } = useQuery(GET_LOCATIONS);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
-
-  return data.locations.map(({ id, name, description, photo }) => (
-    <div key={id}>
-      <h3>{name}</h3>
-      <img width="400" height="250" alt="location-reference" src={`${photo}`} />
-      <br />
-      <b>About this location:</b>
-      <p>{description}</p>
-      <br />
-    </div>
-  ));
-}
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "./graphql/queries/Login";
 
 export default function App() {
+  const [login, { error, loading, data }] = useMutation(LOGIN, {
+    variables: {
+      email: "matty@p.com",
+      password: "bananarama",
+    },
+  });
+
+  if (error) {
+    return <div>Failed to login</div>;
+  }
+
   return (
     <div>
-      <h2 className="text-3xl font-bold underline">My first Apollo app 🚀</h2>
+      <h2 className="text-3xl font-bold underline">
+        Baby's first Apollo app 🚀
+      </h2>
       <br />
-      <DisplayLocations />
+      {!data && !loading && <button onClick={() => login()}>Login</button>}
+      {!data && loading && <div>Loading...</div>}
+      {data && data.login && <h1>Logged in as: {data && data.login.email}</h1>}
     </div>
   );
 }
