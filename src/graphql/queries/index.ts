@@ -1,1 +1,1 @@
-export { useMe } from "./useMe";
+export { GET_ME } from "./getMe";

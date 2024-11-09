@@ -1,13 +1,8 @@
 {
   "compilerOptions": {
-    // ... your other compiler options
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"],
-      "@config/*": ["src/config/*]"],
-      "@graphql/*": ["src/graphql/*]"]
+      "@/*": ["./src/*"]
     }
   },
   "files": [],
