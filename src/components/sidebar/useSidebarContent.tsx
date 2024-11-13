@@ -1,39 +1,53 @@
 import useUser from "@/features/auth/hooks/useUser";
+import { Home, Landmark, Receipt, Upload } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 export const useSidebarContent = () => {
   const currentUser = useUser();
+  const { pathname } = useLocation();
 
   const data = {
     navMain: [
       {
-        title: "Home",
-        url: "#",
+        title: "Dashboard",
+        icon: Home,
+        url: "/",
         open: true,
-        isActive: true,
+        isActive: pathname === "/",
       },
       {
         title: "Accounts",
-        url: "#",
+        icon: Landmark,
         open: true,
         items: currentUser.accounts.edges.map(({ node: account }) => {
           return {
             title: account.name,
-            url: "#",
+            url: `/account/${account.id}`,
           };
         }),
       },
       {
         title: "Transactions",
-        url: "#",
-        open: false,
-      },
-      {
-        title: "Merchants",
-        url: "#",
-        open: false,
+        icon: Receipt,
+        open: pathname.startsWith("/transactions"),
+        items: [
+          {
+            title: "View all",
+            url: "/transactions",
+          },
+          {
+            title: "Categorize",
+            url: "#",
+          },
+          {
+            title: "Merchants",
+            url: "#",
+          },
+        ],
       },
       {
         title: "Upload",
+        icon: Upload,
         url: "#",
         open: false,
         items: [

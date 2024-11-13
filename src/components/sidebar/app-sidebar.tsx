@@ -1,8 +1,8 @@
 import {
+  ChevronDown,
+  ChevronRight,
   ChevronUp,
-  GalleryVerticalEnd,
-  Minus,
-  Plus,
+  LucideDollarSign,
   UserCircle2,
 } from "lucide-react";
 import {
@@ -45,14 +45,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <GalleryVerticalEnd className="size-4" />
+              <a href="/">
+                <div className="flex aspect-square size-6 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <LucideDollarSign className="size-4" />
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Documentation</span>
-                  <span className="">v1.0.0</span>
-                </div>
+                <span className="text-lg font-semibold">Banker</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -69,13 +66,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton>
-                      {item.title}{" "}
+                    <SidebarMenuButton isActive={item.isActive}>
+                      {item?.icon && <item.icon />}
+                      {item?.url && <a href={item.url}>{item.title}</a>}
+                      {!item?.url && item.title}{" "}
                       {item?.items && (
-                        <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
+                        <ChevronRight className="ml-auto group-data-[state=open]/collapsible:hidden" />
                       )}
                       {item?.items && (
-                        <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
+                        <ChevronDown className="ml-auto group-data-[state=closed]/collapsible:hidden" />
                       )}
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -116,7 +115,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 className="w-[--radix-popper-anchor-width]"
               >
                 <DropdownMenuItem>
-                  <span>Account</span>
+                  <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => logout()}>
                   <span>Log out</span>

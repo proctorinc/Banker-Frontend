@@ -41,11 +41,7 @@ export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
   function login(params: LoginParams) {
     loginMutation({
       variables: params,
-    })
-      .then((response) => response?.data?.login as User | null)
-      .then((user) => {
-        setCurrentUser(user);
-      });
+    }).then(() => loadUser());
   }
 
   const isAuthenticated = !!currentUser;
@@ -79,6 +75,13 @@ export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
   //     navigate("/");
   //   }
   // }
+
+  function loadUser() {
+    return client
+      .query({ query: GET_ME })
+      .then((response) => response.data?.me as User | null)
+      .then((user) => setCurrentUser(user));
+  }
 
   useEffect(() => {
     client

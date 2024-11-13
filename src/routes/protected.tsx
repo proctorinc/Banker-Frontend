@@ -1,6 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
 import Home from "@/pages/Home";
 import { Suspense } from "react";
+import Accounts from "@/pages/accounts/Accounts";
+import Transactions from "@/pages/transactions/Transactions";
+import Account from "@/pages/account/Account";
 
 export const App = () => {
   return (
@@ -18,6 +21,18 @@ export const protectedRoutes = [
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/accounts",
+        element: <Accounts />,
+      },
+      {
+        path: "/account/:accountId",
+        element: <Account />,
+      },
+      {
+        path: "/transactions",
+        element: <Transactions />,
       },
       { path: "*", element: <Navigate to="." /> },
     ],
