@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,16 +10,9 @@ import { DataTablePagination } from "./data-table-pagination";
 
 import {
   ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import usePaginate from "@/hooks/usePaginate";
@@ -28,50 +20,38 @@ import usePaginate from "@/hooks/usePaginate";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  pageCount: number;
+  rowCount: number | undefined;
   onNextPage: () => void;
   onPreviousPage: () => void;
+  onFirstPage: () => void;
+  onLastPage: () => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  pageCount,
+  rowCount,
   onNextPage,
   onPreviousPage,
+  onFirstPage,
+  onLastPage,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = useState({});
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = useState<SortingState>([]);
   const { pageSize, pageIndex, setPaginationState } = usePaginate();
 
   const table = useReactTable({
     data,
     columns,
     state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
       pagination: {
         pageIndex,
         pageSize,
       },
     },
-    pageCount,
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
     onPaginationChange: setPaginationState,
+    manualPagination: true,
+    rowCount,
   });
 
   return (
@@ -131,6 +111,8 @@ export function DataTable<TData, TValue>({
         table={table}
         onNextPage={onNextPage}
         onPreviousPage={onPreviousPage}
+        onFirstPage={onFirstPage}
+        onLastPage={onLastPage}
       />
     </div>
   );

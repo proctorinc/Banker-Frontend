@@ -1,20 +1,16 @@
-import { PaginationState } from "@tanstack/react-table";
-import { useState } from "react";
-
-export const PAGE_SIZES = [10, 25, 50];
-const INITIAL_STATE = {
-  pageIndex: 0,
-  pageSize: 10,
-};
+import { useContext } from "react";
+import PaginationContext from "@/context/PaginationContext";
 
 const usePaginate = () => {
-  const [paginationState, setPaginationState] =
-    useState<PaginationState>(INITIAL_STATE);
+  const paginationContext = useContext(PaginationContext);
 
-  return {
-    ...paginationState,
-    setPaginationState,
-  };
+  if (!paginationContext) {
+    throw new Error(
+      "usePaginate has to be used within <PaginationContext.Provider>",
+    );
+  }
+
+  return paginationContext;
 };
 
 export default usePaginate;

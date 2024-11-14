@@ -1,7 +1,7 @@
 import { gql } from "../__generated__";
 
 export const GET_ACCOUNT = gql(`
-    query getAccount($id: ID!) {
+    query getAccount($id: ID!, $first: Int!, $after: String) {
       account(id: $id) {
         id
         uploadSource
@@ -10,7 +10,8 @@ export const GET_ACCOUNT = gql(`
         name
         routingNumber
         transactions(page: {
-          first: 10
+          first: $first
+          after: $after
         }) {
           edges {
             node {
@@ -23,6 +24,13 @@ export const GET_ACCOUNT = gql(`
               }
             }
             cursor
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            endCursor
+            startCursor
+            totalCount
           }
         }
       }

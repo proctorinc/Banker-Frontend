@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Accounts from "@/pages/accounts/Accounts";
 import Transactions from "@/pages/transactions/Transactions";
 import Account from "@/pages/account/Account";
+import { PaginationContextProvider } from "@/context/PaginationContext";
 
 export const App = () => {
   return (

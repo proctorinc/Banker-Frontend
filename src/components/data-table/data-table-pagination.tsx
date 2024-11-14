@@ -14,30 +14,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PAGE_SIZES } from "@/hooks/usePaginate";
+import { PAGE_SIZES } from "@/context/PaginationContext";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
   onNextPage: () => void;
   onPreviousPage: () => void;
+  onFirstPage: () => void;
+  onLastPage: () => void;
 }
 
 export function DataTablePagination<TData>({
   table,
   onNextPage,
   onPreviousPage,
+  onFirstPage,
+  onLastPage,
 }: DataTablePaginationProps<TData>) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+    <div className="relative flex items-center justify-between">
+      <div className="flex items-center justify-center text-sm font-medium">
         Page {table.getState().pagination.pageIndex + 1} of{" "}
         {table.getPageCount()}
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="absolute flex items-center space-x-2 right-1/2 translate-x-1/2">
         <Button
           variant="outline"
           className="hidden h-8 w-8 p-0 lg:flex"
-          onClick={() => table.setPageIndex(0)}
+          onClick={() => {
+            table.setPageIndex(0);
+            onFirstPage();
+          }}
           disabled={!table.getCanPreviousPage()}
         >
           <span className="sr-only">Go to first page</span>
@@ -70,7 +77,10 @@ export function DataTablePagination<TData>({
         <Button
           variant="outline"
           className="hidden h-8 w-8 p-0 lg:flex"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          onClick={() => {
+            table.setPageIndex(table.getPageCount() - 1);
+            onLastPage();
+          }}
           disabled={!table.getCanNextPage()}
         >
           <span className="sr-only">Go to last page</span>

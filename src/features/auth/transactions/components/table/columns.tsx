@@ -11,6 +11,7 @@ export const columns: ColumnDef<Transaction>[] = [
       const transaction = row.original as Transaction;
       return <div className="line-clamp-1">{transaction.merchant.name}</div>;
     },
+    size: 500,
   },
   {
     accessorKey: "Amount",
