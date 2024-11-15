@@ -5,6 +5,7 @@ import Accounts from "@/pages/accounts/Accounts";
 import Transactions from "@/pages/transactions/Transactions";
 import Account from "@/pages/accounts/Account";
 import Savings from "@/pages/savings/Savings";
+import { PaginationContextProvider } from "@/context/PaginationContext";
 
 export const App = () => {
   return (
@@ -25,7 +26,11 @@ export const protectedRoutes = [
       },
       {
         path: "/savings",
-        element: <Savings />,
+        element: (
+          <PaginationContextProvider>
+            <Savings />
+          </PaginationContextProvider>
+        ),
       },
       {
         path: "/accounts",

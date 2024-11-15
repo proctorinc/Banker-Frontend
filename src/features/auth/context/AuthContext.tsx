@@ -47,7 +47,9 @@ export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
   const isAuthenticated = !!currentUser;
 
   function logout() {
-    logoutMutation()
+    logoutMutation({
+      refetchQueries: ["getMe"],
+    })
       .then((response) => console.log(response.data?.logout))
       .then(() => {
         setCurrentUser(null);

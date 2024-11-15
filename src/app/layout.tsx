@@ -22,7 +22,9 @@ const Layout: FC<Props> = ({ title, children }) => {
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div>{title}</div>
         </header>
-        <main className="pt-24 p-8 bg-gray-50 flex-grow">{children}</main>
+        <main className="flex flex-col gap-4 pt-24 p-8 bg-gray-50 flex-grow">
+          {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );

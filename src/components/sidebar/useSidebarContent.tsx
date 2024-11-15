@@ -23,6 +23,7 @@ export const useSidebarContent = () => {
           return {
             title: account.name,
             url: `/account/${account.id}`,
+            isActive: pathname === `/account/${account.id}`,
           };
         }),
       },

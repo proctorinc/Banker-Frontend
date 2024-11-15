@@ -53,27 +53,24 @@ const Account = () => {
     return (
       <PaginationContextProvider>
         <Layout title="Account">
-          <div className="flex flex-1 flex-col gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>{data.account.name}</CardTitle>
-                <CardDescription>{data.account.type}</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Transactions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <TransactionsTable
-                  data={transactions}
-                  totalRows={totalTransactions}
-                  fetchPage={fetchPage}
-                />
-              </CardContent>
-            </Card>
-            <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>{data.account.name}</CardTitle>
+              <CardDescription>{data.account.type}</CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Transactions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TransactionsTable
+                data={transactions}
+                totalRows={totalTransactions}
+                fetchPage={fetchPage}
+              />
+            </CardContent>
+          </Card>
         </Layout>
       </PaginationContextProvider>
     );

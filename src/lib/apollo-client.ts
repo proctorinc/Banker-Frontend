@@ -13,6 +13,7 @@ const apolloClientCache = new InMemoryCache({
     Query: {
       fields: {
         transactions: relayStylePagination(),
+        savingsFunds: relayStylePagination(),
       },
     },
   },
