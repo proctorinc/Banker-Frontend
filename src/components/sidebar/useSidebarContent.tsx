@@ -1,5 +1,5 @@
 import useUser from "@/features/auth/hooks/useUser";
-import { Home, Landmark, Receipt, Upload } from "lucide-react";
+import { Home, Landmark, PiggyBank, Receipt, Upload } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 export const useSidebarContent = () => {
@@ -29,21 +29,14 @@ export const useSidebarContent = () => {
       {
         title: "Transactions",
         icon: Receipt,
+        url: "/transactions",
         open: pathname.startsWith("/transactions"),
-        items: [
-          {
-            title: "View all",
-            url: "/transactions",
-          },
-          {
-            title: "Categorize",
-            url: "#",
-          },
-          {
-            title: "Merchants",
-            url: "#",
-          },
-        ],
+      },
+      {
+        title: "Savings",
+        icon: PiggyBank,
+        url: "/savings",
+        open: pathname.startsWith("/savings"),
       },
       {
         title: "Upload",

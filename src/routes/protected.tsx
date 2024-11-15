@@ -3,8 +3,8 @@ import Home from "@/pages/Home";
 import { Suspense } from "react";
 import Accounts from "@/pages/accounts/Accounts";
 import Transactions from "@/pages/transactions/Transactions";
-import Account from "@/pages/account/Account";
-import { PaginationContextProvider } from "@/context/PaginationContext";
+import Account from "@/pages/accounts/Account";
+import Savings from "@/pages/savings/Savings";
 
 export const App = () => {
   return (
@@ -22,6 +22,10 @@ export const protectedRoutes = [
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/savings",
+        element: <Savings />,
       },
       {
         path: "/accounts",

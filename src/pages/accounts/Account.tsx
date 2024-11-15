@@ -53,7 +53,7 @@ const Account = () => {
     return (
       <PaginationContextProvider>
         <Layout title="Account">
-          <div className="flex flex-1 flex-col gap-4 p-4">
+          <div className="flex flex-1 flex-col gap-4">
             <Card>
               <CardHeader>
                 <CardTitle>{data.account.name}</CardTitle>
