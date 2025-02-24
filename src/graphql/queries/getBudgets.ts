@@ -18,18 +18,19 @@ export const GET_BUDGETS = gql(`
             allocations(page:{
                 first:50
             }) {
-            edges {
-                node {
-                    description
-                    amount
+                edges {
+                    node {
+                        description
+                        amount
+                    }
                 }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              endCursor
-              startCursor
-              totalCount
+                pageInfo {
+                hasNextPage
+                hasPreviousPage
+                endCursor
+                startCursor
+                totalCount
+                }
             }
           }
           cursor
