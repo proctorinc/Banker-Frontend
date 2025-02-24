@@ -12,8 +12,13 @@ export const useSidebarContent = () => {
         title: "Dashboard",
         icon: Home,
         url: "/",
-        open: true,
         isActive: pathname === "/",
+      },
+      {
+        title: "Savings",
+        icon: PiggyBank,
+        url: "/savings",
+        isActive: pathname.startsWith("/savings"),
       },
       {
         title: "Accounts",
@@ -27,29 +32,23 @@ export const useSidebarContent = () => {
           };
         }),
       },
+      // {
+      //   title: "Budgets",
+      //   icon: PieChart,
+      //   url: "/budgets",
+      //   open: pathname.startsWith("/budgets"),
+      // },
       {
         title: "Transactions",
         icon: Receipt,
         url: "/transactions",
-        open: pathname.startsWith("/transactions"),
-      },
-      {
-        title: "Savings",
-        icon: PiggyBank,
-        url: "/savings",
-        open: pathname.startsWith("/savings"),
+        isActive: pathname.startsWith("/transactions"),
       },
       {
         title: "Upload",
         icon: Upload,
-        url: "#",
-        open: false,
-        items: [
-          {
-            title: "Chase Upload",
-            url: "#",
-          },
-        ],
+        url: "/upload",
+        isActive: pathname.startsWith("/upload"),
       },
     ],
   };

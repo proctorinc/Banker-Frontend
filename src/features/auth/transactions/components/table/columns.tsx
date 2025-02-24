@@ -18,7 +18,9 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const transaction = row.original as Transaction;
       return (
-        <div className="line-clamp-1">{formatCurrency(transaction.amount)}</div>
+        <div className="line-clamp-1">
+          {formatCurrency(transaction.amount, true)}
+        </div>
       );
     },
   },

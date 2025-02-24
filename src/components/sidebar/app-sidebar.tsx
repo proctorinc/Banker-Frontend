@@ -33,6 +33,7 @@ import {
 import { useSidebarContent } from "./useSidebarContent";
 import useAuth from "@/features/auth/hooks/useAuth";
 import useUser from "@/features/auth/hooks/useUser";
+import { Link } from "react-router-dom";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { logout } = useAuth();
@@ -61,21 +62,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             {data.navMain.map((item) => (
               <Collapsible
                 key={item.title}
-                defaultOpen={item.open}
+                defaultOpen={item.open ?? false}
                 className="group/collapsible"
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton isActive={item.isActive}>
-                      {item?.icon && <item.icon />}
-                      {item?.url && <a href={item.url}>{item.title}</a>}
-                      {!item?.url && item.title}{" "}
-                      {item?.items && (
-                        <ChevronRight className="ml-auto group-data-[state=open]/collapsible:hidden" />
-                      )}
-                      {item?.items && (
-                        <ChevronDown className="ml-auto group-data-[state=closed]/collapsible:hidden" />
-                      )}
+                    <SidebarMenuButton isActive={item.isActive} asChild>
+                      <Link className="flex gap-2 items-center" to={item.url}>
+                        {item?.icon && <item.icon size={15} />}
+                        {item?.url && <span>{item.title}</span>}
+                        {!item?.url && item.title}{" "}
+                        {item?.items && (
+                          <ChevronRight className="ml-auto group-data-[state=open]/collapsible:hidden" />
+                        )}
+                        {item?.items && (
+                          <ChevronDown className="ml-auto group-data-[state=closed]/collapsible:hidden" />
+                        )}
+                      </Link>
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   {item.items?.length ? (

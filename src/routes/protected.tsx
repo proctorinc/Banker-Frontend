@@ -4,8 +4,10 @@ import { Suspense } from "react";
 import Accounts from "@/pages/accounts/Accounts";
 import Transactions from "@/pages/transactions/Transactions";
 import Account from "@/pages/accounts/Account";
-import Savings from "@/pages/savings/Savings";
+import SavingsPage from "@/pages/savings/SavingsPage";
 import { PaginationContextProvider } from "@/context/PaginationContext";
+import SavingsPageContextProvider from "@/features/savings";
+import UploadPage from "@/pages/upload/UploadPage";
 
 export const App = () => {
   return (
@@ -28,7 +30,9 @@ export const protectedRoutes = [
         path: "/savings",
         element: (
           <PaginationContextProvider>
-            <Savings />
+            <SavingsPageContextProvider>
+              <SavingsPage />
+            </SavingsPageContextProvider>
           </PaginationContextProvider>
         ),
       },
@@ -43,6 +47,10 @@ export const protectedRoutes = [
       {
         path: "/transactions",
         element: <Transactions />,
+      },
+      {
+        path: "/upload",
+        element: <UploadPage />,
       },
       { path: "*", element: <Navigate to="." /> },
     ],

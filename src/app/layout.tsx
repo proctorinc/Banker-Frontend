@@ -8,7 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import { FC, ReactNode } from "react";
 
 type Props = {
-  title: ReactNode;
+  title: string;
+  selectDate?: boolean;
   children: ReactNode;
 };
 
@@ -17,13 +18,17 @@ const Layout: FC<Props> = ({ title, children }) => {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="top-0 fixed w-full bg-white z-10 flex h-16 shrink-0 items-center gap-2 border-b px-4">
+        <header className="top-0 fixed w-full bg-white z-10 flex h-16 shrink-0 items-center gap-4 border-b px-8">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
-          <div>{title}</div>
+          <div className="w-full">
+            <h1>{title}</h1>
+          </div>
         </header>
-        <main className="flex flex-col gap-4 pt-24 p-8 bg-gray-50 flex-grow">
-          {children}
+        <main className="flex pt-24 p-8 bg-gray-50 flex-grow justify-center w-full">
+          <div className="w-full max-w-[1000px] gap-4 flex flex-col ">
+            {children}
+          </div>
         </main>
       </SidebarInset>
     </SidebarProvider>

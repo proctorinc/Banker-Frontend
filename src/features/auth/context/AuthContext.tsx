@@ -4,12 +4,7 @@ import { GET_ME } from "@/graphql/queries";
 import { client } from "@/lib/apollo-client";
 import { useMutation } from "@apollo/client";
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
-import {
-  createSearchParams,
-  useLocation,
-  useNavigate,
-  // useSearchParams,
-} from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 
 type LoginParams = {
   email: string;
@@ -112,9 +107,7 @@ export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={contextData}>
-      {isLoading ? <div>Loading Auth...</div> : children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
   );
 };
 
