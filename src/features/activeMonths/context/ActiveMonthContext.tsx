@@ -34,28 +34,34 @@ export const ActiveMonthsContextProvider: FC<Props> = ({ children }) => {
     client
       .query({ query: GET_ACTIVE_MONTHS })
       .then((response) => response.data.months as MonthItem[])
-      .then((months) => {
-        setActiveMonths(months);
-        const monthParam = searchParams.get("month");
-        if (monthParam) {
-          try {
-            selectMonth(monthParam);
-          } catch {
-            setSelectedMonth(months[0]);
-            setSearchParams((prev) => {
-              prev.delete("month");
-              return prev;
-            }); // Clear month query param
-          }
-        } else {
-          setSelectedMonth(months[0]);
-        }
-      })
+      .then((months) => setActiveMonths(months))
       .catch((error) => {
         console.error(error);
       })
       .finally(() => setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (activeMonths.length > 0) {
+      const monthParam = searchParams.get("month");
+      console.log(monthParam);
+      if (monthParam) {
+        try {
+          console.log(activeMonths);
+          selectMonth(monthParam);
+        } catch (error) {
+          console.error(error);
+          setSelectedMonth(activeMonths[0]);
+          setSearchParams((prev) => {
+            prev.delete("month");
+            return prev;
+          }); // Clear month query param
+        }
+      } else {
+        setSelectedMonth(activeMonths[0]);
+      }
+    }
+  }, [activeMonths]);
 
   function isCurrentMonthSelected() {
     const today = getCurrentMonth();
