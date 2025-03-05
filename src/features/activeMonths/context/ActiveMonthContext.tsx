@@ -1,9 +1,10 @@
 import { MonthItem } from "@/graphql/__generated__/graphql";
 import { GET_ACTIVE_MONTHS } from "@/graphql/queries";
-import { client } from "@/lib/apollo-client";
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getFirstAndLastDaysOfMonth } from "../utils";
+import { useQuery } from "@apollo/client";
+import { toast } from "sonner";
 
 type Props = {
   children: ReactNode;
@@ -19,49 +20,47 @@ type ActiveMonthsContext = {
   hasPreviousMonth: () => boolean;
   selectNextMonth: () => void;
   selectPreviousMonth: () => void;
-  isLoading: boolean;
+  loading: boolean;
 };
 
 const ActiveMonthsContext = createContext<ActiveMonthsContext | null>(null);
 
 export const ActiveMonthsContextProvider: FC<Props> = ({ children }) => {
-  const [activeMonths, setActiveMonths] = useState<MonthItem[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<MonthItem | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { loading, error, data } = useQuery(GET_ACTIVE_MONTHS);
+  const activeMonths: MonthItem[] = data ? data?.months : [];
 
   useEffect(() => {
-    client
-      .query({ query: GET_ACTIVE_MONTHS })
-      .then((response) => response.data.months as MonthItem[])
-      .then((months) => setActiveMonths(months))
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  useEffect(() => {
-    if (activeMonths.length > 0) {
-      const monthParam = searchParams.get("month");
-      console.log(monthParam);
-      if (monthParam) {
-        try {
-          console.log(activeMonths);
-          selectMonth(monthParam);
-        } catch (error) {
-          console.error(error);
-          setSelectedMonth(activeMonths[0]);
-          setSearchParams((prev) => {
-            prev.delete("month");
-            return prev;
-          }); // Clear month query param
-        }
-      } else {
+    const monthParam = searchParams.get("month");
+    if (activeMonths.length > 0 && monthParam) {
+      try {
+        selectMonth(monthParam);
+      } catch {
         setSelectedMonth(activeMonths[0]);
+
+        // Delete invalid month query parameter
+        setSearchParams((prev) => {
+          prev.delete("month");
+          return prev;
+        });
+
+        toast.warning(`'${monthParam}' is not a valid month`, {
+          description: "Defaulting to most recent month",
+          closeButton: true,
+        });
       }
+    } else {
+      setSelectedMonth(activeMonths[0]);
     }
   }, [activeMonths]);
+
+  if (error) {
+    toast.error("Uh oh, an error occurred", {
+      description: error.message,
+      closeButton: true,
+    });
+  }
 
   function isCurrentMonthSelected() {
     const today = getCurrentMonth();
@@ -154,7 +153,7 @@ export const ActiveMonthsContextProvider: FC<Props> = ({ children }) => {
     months: activeMonths,
     selectedMonth,
     selectMonth,
-    isLoading,
+    loading,
     isCurrentMonthSelected,
     selectCurrentMonth,
     hasNextMonth,
