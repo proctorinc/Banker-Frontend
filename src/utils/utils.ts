@@ -11,13 +11,15 @@ export function formatCurrency(value: number, full = false) {
     return formatted;
   }
 
-  if (value > ONE_MILLION) {
-    const newValue = (Math.abs(value) / ONE_MILLION).toFixed(2);
+  const absoluteVal = Math.abs(value);
+
+  if (absoluteVal > ONE_MILLION) {
+    const newValue = (Math.abs(value) / ONE_MILLION).toFixed(1);
     return `${value < 0 ? "-" : ""}$${parseFloat(newValue)}K`;
-  } else if (value > ONE_THOUSAND) {
-    const newValue = (Math.abs(value) / ONE_THOUSAND).toFixed(2);
+  } else if (absoluteVal > ONE_THOUSAND) {
+    const newValue = (Math.abs(value) / ONE_THOUSAND).toFixed(1);
     return `${value < 0 ? "-" : ""}$${parseFloat(newValue)}K`;
   } else {
-    return `${value < 0 ? "-" : ""}$${parseFloat(Math.abs(value).toFixed(2))}`;
+    return `${value < 0 ? "-" : ""}$${parseFloat(Math.abs(value).toFixed(1))}`;
   }
 }

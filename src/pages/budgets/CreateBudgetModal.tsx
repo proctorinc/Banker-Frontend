@@ -15,7 +15,7 @@ import { CREATE_FUND } from "@/graphql/mutations";
 import { useState } from "react";
 
 const CreateBudgetModal = () => {
-  const [createFund, { loading, error, data }] = useMutation(CREATE_FUND, {
+  const [createFund] = useMutation(CREATE_FUND, {
     refetchQueries: ["getBudgets"],
   });
   const [name, setName] = useState("");

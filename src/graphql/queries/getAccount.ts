@@ -4,11 +4,14 @@ export const GET_ACCOUNT = gql(`
     query getAccount($id: ID!, $first: Int!, $after: String) {
       account(id: $id) {
         id
-        uploadSource
         sourceId
         type
         name
         routingNumber
+        lastSync {
+            date
+            uploadSource
+        }
         transactions(page: {
           first: $first
           after: $after

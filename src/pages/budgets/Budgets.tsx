@@ -20,7 +20,7 @@ import { Progress } from "@/components/ui/progress";
 
 const Budgets = () => {
   const { pageSize, cursor, getNextPage } = usePaginate();
-  const { loading, error, data, fetchMore } = useQuery(GET_BUDGETS, {
+  const { error, data, fetchMore } = useQuery(GET_BUDGETS, {
     variables: {
       first: pageSize,
     },
@@ -42,10 +42,6 @@ const Budgets = () => {
       },
     });
   }, [fetchMore, pageSize, cursor]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return <div>{error.message}</div>;

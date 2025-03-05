@@ -1,5 +1,4 @@
-import { SavingsPageContextProvider } from "./context/SavingsPageContext";
+import SavingsPage from "./SavingsPage";
 
-export * from "./components";
-export { useSavingsPage } from "./hooks/useSavingsPage";
-export default SavingsPageContextProvider;
+export { SavingsPageProviders } from "./providers";
+export default SavingsPage;

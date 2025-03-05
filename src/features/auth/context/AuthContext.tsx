@@ -43,7 +43,7 @@ export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
 
   function logout() {
     logoutMutation({
-      refetchQueries: ["getMe"],
+      refetchQueries: [{ query: GET_ME }],
     })
       .then((response) => console.log(response.data?.logout))
       .then(() => {

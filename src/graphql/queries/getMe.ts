@@ -8,15 +8,18 @@ export const GET_ME = gql(`
         email
         role
         accounts(page:{
-          first: 5
+          first: 10
         }) {
           edges {
             node {
               id
-              uploadSource
               type
               name
               routingNumber
+              lastSync {
+                  date
+                  uploadSource
+              }
             }
             cursor
           }

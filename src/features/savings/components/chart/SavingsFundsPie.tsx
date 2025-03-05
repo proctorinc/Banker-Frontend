@@ -7,13 +7,7 @@ import {
 } from "@/components/ui/chart";
 import { useMemo } from "react";
 import { formatCurrency } from "@/utils/utils";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-];
+import { useSavingsPage } from "../../hooks/useSavingsPage";
 
 const chartConfig = {
   visitors: {
@@ -41,15 +35,26 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export const SavingsChart = () => {
-  const totalVisitors = useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+export const SavingsFundsPie = () => {
+  const { data } = useSavingsPage();
+  const chartData = useMemo(() => {
+    return data
+      ? data.funds.edges
+          .filter((edge) => edge.node.total > 0)
+          .map((edge, i) => {
+            return {
+              label: edge.node.name,
+              total: edge.node.total,
+              fill: `hsl(var(--chart-${(i % 4) + 3}))`,
+            };
+          })
+      : [];
+  }, [data]);
 
   return (
     <ChartContainer
       config={chartConfig}
-      className="w-full aspect-square max-h-[350px]"
+      className="w-full aspect-square max-h-[300px]"
     >
       <PieChart>
         <ChartTooltip
@@ -58,9 +63,9 @@ export const SavingsChart = () => {
         />
         <Pie
           data={chartData}
-          dataKey="visitors"
-          nameKey="browser"
-          innerRadius={110}
+          dataKey="total"
+          nameKey="label"
+          innerRadius={90}
           strokeWidth={5}
         >
           <Label
@@ -78,7 +83,7 @@ export const SavingsChart = () => {
                       y={viewBox.cy}
                       className="fill-foreground text-3xl font-bold"
                     >
-                      {formatCurrency(totalVisitors)}
+                      {formatCurrency(data.totalSavings)}
                     </tspan>
                     <tspan
                       x={viewBox.cx}

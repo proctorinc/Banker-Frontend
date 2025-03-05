@@ -4,6 +4,7 @@ import { GET_SAVINGS_PAGE_DATA } from "@/graphql/queries";
 import usePaginate from "@/hooks/usePaginate";
 import { ApolloError, useQuery } from "@apollo/client";
 import { createContext, FC, ReactNode, useEffect } from "react";
+import { toast } from "sonner";
 
 type SavingsPageContextProviderProps = {
   children: ReactNode;
@@ -28,13 +29,14 @@ export const SavingsPageContextProvider: FC<
   SavingsPageContextProviderProps
 > = ({ children }) => {
   const { pageSize, cursor, getNextPage } = usePaginate();
-  const { currentMonth } = useActiveMonths();
+  const { selectedMonth } = useActiveMonths();
   const { loading, error, data, fetchMore } = useQuery(GET_SAVINGS_PAGE_DATA, {
     variables: {
-      startDate: currentMonth?.start,
-      endDate: currentMonth?.end,
+      startDate: selectedMonth?.start,
+      endDate: selectedMonth?.end,
       first: pageSize,
     },
+    skip: !selectedMonth,
   });
 
   // Pagination data for savings funds
@@ -47,13 +49,20 @@ export const SavingsPageContextProvider: FC<
   useEffect(() => {
     fetchMore({
       variables: {
-        startDate: currentMonth?.start,
-        endDate: currentMonth?.end,
+        startDate: selectedMonth?.start,
+        endDate: selectedMonth?.end,
         first: pageSize,
         after: cursor,
       },
     });
-  }, [currentMonth?.start, currentMonth?.end, fetchMore, pageSize, cursor]);
+  }, [selectedMonth, fetchMore, pageSize, cursor]);
+
+  if (error) {
+    toast.error("Uh oh, an error occurred", {
+      description: error.message,
+      closeButton: true,
+    });
+  }
 
   const contextData = {
     data: data?.savingsFunds as FundsResponse,

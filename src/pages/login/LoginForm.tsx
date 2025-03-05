@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 
 export function LoginForm() {
-  const [email, setEmail] = useState("matty@p.com");
+  const [email, setEmail] = useState("test@demo.com");
   const [password, setPassword] = useState("bananarama");
   const { login } = useAuth();
 

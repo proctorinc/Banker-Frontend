@@ -1,6 +1,7 @@
 import { ReactNode, FC } from "react";
 import { GraphQLProvider } from "@/graphql/provider.tsx";
 import { ActiveMonthsContextProvider } from "@/features/activeMonths/context/ActiveMonthContext";
+import { Toaster } from "@/components/ui/sonner";
 
 type Props = {
   children: ReactNode;
@@ -9,7 +10,10 @@ type Props = {
 const AppProviders: FC<Props> = ({ children }) => {
   return (
     <GraphQLProvider>
-      <ActiveMonthsContextProvider>{children}</ActiveMonthsContextProvider>
+      <ActiveMonthsContextProvider>
+        {children}
+        <Toaster richColors />
+      </ActiveMonthsContextProvider>
     </GraphQLProvider>
   );
 };

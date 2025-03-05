@@ -1,5 +1,12 @@
 import useUser from "@/features/auth/hooks/useUser";
-import { Home, Landmark, PiggyBank, Receipt, Upload } from "lucide-react";
+import {
+  Calendar,
+  Coins,
+  Landmark,
+  PlaneTakeoff,
+  Receipt,
+  Upload,
+} from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 export const useSidebarContent = () => {
@@ -9,14 +16,20 @@ export const useSidebarContent = () => {
   const data = {
     navMain: [
       {
-        title: "Dashboard",
-        icon: Home,
+        title: "Overview",
+        icon: PlaneTakeoff,
         url: "/",
         isActive: pathname === "/",
       },
       {
+        title: "Monthly",
+        icon: Calendar,
+        url: "/monthly",
+        isActive: pathname.startsWith("/monthly"),
+      },
+      {
         title: "Savings",
-        icon: PiggyBank,
+        icon: Coins,
         url: "/savings",
         isActive: pathname.startsWith("/savings"),
       },
@@ -29,6 +42,7 @@ export const useSidebarContent = () => {
             title: account.name,
             url: `/account/${account.id}`,
             isActive: pathname === `/account/${account.id}`,
+            warning: isDaysOld(new Date(account.lastSync.date), 30),
           };
         }),
       },
@@ -55,3 +69,11 @@ export const useSidebarContent = () => {
 
   return data;
 };
+
+function isDaysOld(date: Date, numberOfDays: number) {
+  const DAY = 1000 * 60 * 60 * 24;
+  const currentDate = Date.now();
+  const timeDifference = currentDate - date.getTime();
+  const daysDifference = Math.floor(timeDifference / DAY);
+  return daysDifference >= numberOfDays;
+}

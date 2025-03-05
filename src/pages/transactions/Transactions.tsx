@@ -10,7 +10,7 @@ import TransactionsTable from "@/features/auth/transactions/components/table/tra
 import { Transaction } from "@/graphql/__generated__/graphql";
 
 const Transactions = () => {
-  const { loading, error, data, refetch } = useQuery(GET_TRANSACTIONS, {
+  const { error, data, refetch } = useQuery(GET_TRANSACTIONS, {
     variables: {
       first: INITIAL_PAGE_SIZE,
     },
@@ -27,10 +27,6 @@ const Transactions = () => {
       first: pageSize,
       after: cursor,
     });
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
   }
 
   if (error) {

@@ -9,7 +9,6 @@ import { FC, ReactNode } from "react";
 
 type Props = {
   title: string;
-  selectDate?: boolean;
   children: ReactNode;
 };
 
@@ -26,7 +25,7 @@ const Layout: FC<Props> = ({ title, children }) => {
           </div>
         </header>
         <main className="flex pt-24 p-8 bg-gray-50 flex-grow justify-center w-full">
-          <div className="w-full max-w-[1000px] gap-4 flex flex-col ">
+          <div className="w-full max-w-[1000px] gap-6 flex flex-col ">
             {children}
           </div>
         </main>

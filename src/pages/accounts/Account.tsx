@@ -18,7 +18,7 @@ import TransactionsTable from "@/features/auth/transactions/components/table/tra
 
 const Account = () => {
   const { accountId } = useParams();
-  const { loading, error, data, refetch } = useQuery(GET_ACCOUNT, {
+  const { error, data, refetch } = useQuery(GET_ACCOUNT, {
     variables: {
       id: accountId as string,
       first: INITIAL_PAGE_SIZE,
@@ -41,10 +41,6 @@ const Account = () => {
     });
   }
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>{error.message}</div>;
   }
@@ -55,7 +51,23 @@ const Account = () => {
         <Layout title="Account">
           <Card>
             <CardHeader>
-              <CardTitle>{data.account.name}</CardTitle>
+              <CardTitle>
+                <div className="flex w-full justify-between">
+                  <h1>{data.account.name}</h1>
+                  <p className="font-light text-xs">
+                    last sync:{" "}
+                    {new Date(data.account.lastSync.date).toLocaleString(
+                      "en-US",
+                      {
+                        month: "numeric",
+                        day: "numeric",
+                        year: "numeric",
+                        timeZone: "America/Los_Angeles",
+                      },
+                    )}
+                  </p>
+                </div>
+              </CardTitle>
               <CardDescription>{data.account.type}</CardDescription>
             </CardHeader>
           </Card>

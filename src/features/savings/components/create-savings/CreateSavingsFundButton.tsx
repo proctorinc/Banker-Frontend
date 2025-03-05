@@ -21,7 +21,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const CreateSavingsFundButton = () => {
-  const [createFund, { loading, error, data }] = useMutation(CREATE_FUND, {
+  const [createFund] = useMutation(CREATE_FUND, {
     refetchQueries: ["getSavingsFunds"],
   });
   const [name, setName] = useState("");
@@ -41,7 +41,7 @@ export const CreateSavingsFundButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button>
           <Plus />
           New Fund
         </Button>

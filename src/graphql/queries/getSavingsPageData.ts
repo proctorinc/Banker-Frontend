@@ -3,11 +3,19 @@ import { gql } from "../__generated__";
 export const GET_SAVINGS_PAGE_DATA = gql(`
     query getSavingsFunds($startDate: Date!, $endDate: Date!, $first: Int!, $after: String) {
       savingsFunds(filter: {startDate: $startDate, endDate: $endDate}) {
+        totalSavings
+        unallocated
+        savingsHistory {
+            month
+            year
+            saved
+            spent
+            net
+        }
         stats {
-          totalSavings
           saved
           spent
-          unallocated
+          net
         }
         funds(page: {first: $first, after: $after}) {
           edges {
@@ -19,6 +27,26 @@ export const GET_SAVINGS_PAGE_DATA = gql(`
               total
               startDate
               endDate
+              stats(input: {
+                  filter: {
+                    startDate: $startDate
+                    endDate: $endDate
+                  }
+              }) {
+                  saved
+                  spent
+                  net
+              }
+              allocations(page: {first: 10}) {
+                edges {
+                    node {
+                        id
+                        description
+                        amount
+                        date
+                    }
+                }
+              }
             }
             cursor
           }

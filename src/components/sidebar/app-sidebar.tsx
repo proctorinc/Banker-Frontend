@@ -2,6 +2,7 @@ import {
   ChevronDown,
   ChevronRight,
   ChevronUp,
+  CircleAlert,
   LucideDollarSign,
   UserCircle2,
 } from "lucide-react";
@@ -68,7 +69,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton isActive={item.isActive} asChild>
-                      <Link className="flex gap-2 items-center" to={item.url}>
+                      <Link
+                        className="flex gap-2 items-center"
+                        to={item.url ?? ""}
+                      >
                         {item?.icon && <item.icon size={15} />}
                         {item?.url && <span>{item.title}</span>}
                         {!item?.url && item.title}{" "}
@@ -90,7 +94,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                               asChild
                               isActive={item.isActive}
                             >
-                              <a href={item.url}>{item.title}</a>
+                              <Link to={item.url}>
+                                <span className="whitespace-nowrap text-ellipsis">
+                                  {item.title}
+                                </span>
+                                {item?.warning && (
+                                  <CircleAlert
+                                    className="text-yellow-500"
+                                    size={15}
+                                  />
+                                )}
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}

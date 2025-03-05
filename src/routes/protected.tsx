@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
-import Home from "@/pages/Home";
 import { Suspense } from "react";
 import Accounts from "@/pages/accounts/Accounts";
 import Transactions from "@/pages/transactions/Transactions";
 import Account from "@/pages/accounts/Account";
-import SavingsPage from "@/pages/savings/SavingsPage";
-import { PaginationContextProvider } from "@/context/PaginationContext";
-import SavingsPageContextProvider from "@/features/savings";
+import SavingsPage, { SavingsPageProviders } from "@/features/savings";
 import UploadPage from "@/pages/upload/UploadPage";
+import MonthlyPage from "@/pages/monthly/MonthlyPage";
+import DashboardPage from "@/pages/dashboard/DashboardPage";
+import { PaginationContextProvider } from "@/context/PaginationContext";
 
 export const App = () => {
   return (
@@ -24,16 +24,22 @@ export const protectedRoutes = [
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <DashboardPage />,
+      },
+      {
+        path: "/monthly",
+        element: (
+          <PaginationContextProvider>
+            <MonthlyPage />
+          </PaginationContextProvider>
+        ),
       },
       {
         path: "/savings",
         element: (
-          <PaginationContextProvider>
-            <SavingsPageContextProvider>
-              <SavingsPage />
-            </SavingsPageContextProvider>
-          </PaginationContextProvider>
+          <SavingsPageProviders>
+            <SavingsPage />
+          </SavingsPageProviders>
         ),
       },
       {
