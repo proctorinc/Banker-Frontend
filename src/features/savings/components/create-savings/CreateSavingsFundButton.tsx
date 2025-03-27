@@ -19,10 +19,11 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Checkbox } from "@/components/ui/checkbox";
+import { GET_SAVINGS_PAGE_DATA } from "@/graphql/queries";
 
 export const CreateSavingsFundButton = () => {
   const [createFund] = useMutation(CREATE_FUND, {
-    refetchQueries: ["getSavingsFunds"],
+    refetchQueries: [{ query: GET_SAVINGS_PAGE_DATA }],
   });
   const [name, setName] = useState("");
   const [goal, setGoal] = useState(0);
@@ -31,7 +32,6 @@ export const CreateSavingsFundButton = () => {
   function createSavingsFund() {
     createFund({
       variables: {
-        type: "SAVINGS",
         name,
         goal,
       },

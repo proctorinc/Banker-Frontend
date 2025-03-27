@@ -13,6 +13,11 @@ export const GET_TRANSACTIONS = gql(`
             amount
             payee
             date
+            category {
+                name
+                color
+                icon
+            }
             merchant {
               name
               sourceId

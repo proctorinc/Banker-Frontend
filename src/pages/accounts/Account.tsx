@@ -15,10 +15,11 @@ import {
 } from "@/context/PaginationContext";
 import { Transaction } from "@/graphql/__generated__/graphql";
 import TransactionsTable from "@/features/auth/transactions/components/table/transaction-table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Account = () => {
   const { accountId } = useParams();
-  const { error, data, refetch } = useQuery(GET_ACCOUNT, {
+  const { error, data, refetch, loading } = useQuery(GET_ACCOUNT, {
     variables: {
       id: accountId as string,
       first: INITIAL_PAGE_SIZE,
@@ -45,50 +46,62 @@ const Account = () => {
     return <div>{error.message}</div>;
   }
 
-  if (!!data && !!data.account) {
-    return (
-      <PaginationContextProvider>
-        <Layout title="Account">
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                <div className="flex w-full justify-between">
+  return (
+    <PaginationContextProvider>
+      <Layout title="Account">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <div className="flex w-full justify-between">
+                {loading && (
+                  <Skeleton className="w-[100px] h-[20px] rounded-xl" />
+                )}
+                {!loading && data && data.account && (
                   <h1>{data.account.name}</h1>
-                  <p className="font-light text-xs">
-                    last sync:{" "}
-                    {new Date(data.account.lastSync.date).toLocaleString(
-                      "en-US",
-                      {
-                        month: "numeric",
-                        day: "numeric",
-                        year: "numeric",
-                        timeZone: "America/Los_Angeles",
-                      },
-                    )}
-                  </p>
-                </div>
-              </CardTitle>
-              <CardDescription>{data.account.type}</CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Transactions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TransactionsTable
-                data={transactions}
-                totalRows={totalTransactions}
-                fetchPage={fetchPage}
-              />
-            </CardContent>
-          </Card>
-        </Layout>
-      </PaginationContextProvider>
-    );
-  } else {
-    <div>Failed to load account</div>;
-  }
+                )}
+                <CardDescription>
+                  {loading && (
+                    <Skeleton className="w-[150px] h-[20px] rounded-xl" />
+                  )}
+                  {!loading && data && data.account && (
+                    <>
+                      last sync:{" "}
+                      {new Date(data.account.lastSync.date).toLocaleString(
+                        "en-US",
+                        {
+                          month: "numeric",
+                          day: "numeric",
+                          year: "numeric",
+                          timeZone: "America/Los_Angeles",
+                        },
+                      )}
+                    </>
+                  )}
+                </CardDescription>
+              </div>
+            </CardTitle>
+            <CardDescription>
+              {loading && <Skeleton className="w-[50px] h-[20px] rounded-xl" />}
+              {!loading && data && data.account && data.account.type}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Transactions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TransactionsTable
+              data={transactions}
+              totalRows={totalTransactions}
+              fetchPage={fetchPage}
+              loading={loading}
+            />
+          </CardContent>
+        </Card>
+      </Layout>
+    </PaginationContextProvider>
+  );
 };
 
 export default Account;

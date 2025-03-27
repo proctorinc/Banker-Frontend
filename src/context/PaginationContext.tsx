@@ -9,7 +9,7 @@ import {
 } from "react";
 
 export const PAGE_SIZES = [10, 25, 50];
-export const INITIAL_PAGE_SIZE = PAGE_SIZES[0];
+export const INITIAL_PAGE_SIZE = PAGE_SIZES[2];
 
 const INITIAL_STATE = {
   pageIndex: 0,

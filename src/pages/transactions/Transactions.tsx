@@ -1,5 +1,5 @@
 import Layout from "@/app/layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { GET_TRANSACTIONS } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 import {
@@ -10,7 +10,7 @@ import TransactionsTable from "@/features/auth/transactions/components/table/tra
 import { Transaction } from "@/graphql/__generated__/graphql";
 
 const Transactions = () => {
-  const { error, data, refetch } = useQuery(GET_TRANSACTIONS, {
+  const { error, data, refetch, loading } = useQuery(GET_TRANSACTIONS, {
     variables: {
       first: INITIAL_PAGE_SIZE,
     },
@@ -39,15 +39,13 @@ const Transactions = () => {
         <div className="flex flex-1 flex-col gap-4">
           <Card>
             <CardHeader>
-              <CardTitle>Transactions</CardTitle>
-            </CardHeader>
-            <CardContent>
               <TransactionsTable
                 data={transactions}
                 totalRows={totalTransactions}
                 fetchPage={fetchPage}
+                loading={loading}
               />
-            </CardContent>
+            </CardHeader>
           </Card>
         </div>
       </Layout>

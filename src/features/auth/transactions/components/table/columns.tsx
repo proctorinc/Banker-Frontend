@@ -3,9 +3,20 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Transaction } from "@/graphql/__generated__/graphql";
 import { formatCurrency } from "@/utils/utils";
+import CategoryIconSelector from "@/components/icons/CategoryIconSelector";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
+    id: "category",
+    accessorKey: "Category",
+    cell: ({ row }) => {
+      const transaction = row.original;
+      return <CategoryIconSelector category={transaction.category} />;
+    },
+    size: 500,
+  },
+  {
+    id: "merchant",
     accessorKey: "Merchant",
     cell: ({ row }) => {
       const transaction = row.original as Transaction;
@@ -14,6 +25,7 @@ export const columns: ColumnDef<Transaction>[] = [
     size: 500,
   },
   {
+    id: "amount",
     accessorKey: "Amount",
     cell: ({ row }) => {
       const transaction = row.original as Transaction;
@@ -25,13 +37,16 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
   {
+    id: "description",
     accessorKey: "Description",
+    enableGlobalFilter: true,
     cell: ({ row }) => {
       const transaction = row.original as Transaction;
       return <div className="line-clamp-1">{transaction.description}</div>;
     },
   },
   {
+    id: "date",
     accessorKey: "Date",
     cell: ({ row }) => {
       const transaction = row.original as Transaction;

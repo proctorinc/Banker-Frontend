@@ -33,6 +33,7 @@ export const ActiveMonthsContextProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const monthParam = searchParams.get("month");
+
     if (activeMonths.length > 0 && monthParam) {
       try {
         selectMonth(monthParam);

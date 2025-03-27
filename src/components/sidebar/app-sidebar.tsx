@@ -35,6 +35,7 @@ import { useSidebarContent } from "./useSidebarContent";
 import useAuth from "@/features/auth/hooks/useAuth";
 import useUser from "@/features/auth/hooks/useUser";
 import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { logout } = useAuth();
@@ -94,7 +95,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                               asChild
                               isActive={item.isActive}
                             >
-                              <Link to={item.url}>
+                              <Link
+                                to={item.url}
+                                className="flex gap-1 items-center"
+                              >
+                                <Avatar className="w-6 h-6 bg-white rounded-full">
+                                  <AvatarImage src="/images/chase.png" />
+                                  <AvatarFallback>GnB</AvatarFallback>
+                                </Avatar>
                                 <span className="whitespace-nowrap text-ellipsis">
                                   {item.title}
                                 </span>

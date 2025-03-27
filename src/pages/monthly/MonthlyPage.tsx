@@ -24,6 +24,7 @@ import { Transaction } from "@/graphql/__generated__/graphql";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { MonthlyFlow } from "@/features/monthly";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const chartConfig = {
   desktop: {
@@ -33,7 +34,7 @@ const chartConfig = {
 
 const MonthlyPage = () => {
   const { selectedMonth } = useActiveMonths();
-  const { error, data } = useQuery(GET_STATS, {
+  const { error, data, loading } = useQuery(GET_STATS, {
     variables: {
       startDate: selectedMonth?.start,
       endDate: selectedMonth?.end,
@@ -80,29 +81,31 @@ const MonthlyPage = () => {
         <ActiveMonthSelector />
       </div>
       <div className="flex gap-4">
-        <Card className="w-1/3">
+        <Card className="w-1/4">
           <CardHeader>
-            <CardTitle className="flex justify-between text-lg">
-              <h2>Cash Flow</h2>
+            <CardTitle className="flex justify-between text-sm">
+              <h2 className="text-lg">Cash Flow</h2>
               {data && data.net.total > 0 && (
-                <div className="flex gap-2 text-emerald-500 items-center">
-                  <TrendingUp />
+                <div className="flex gap-1 text-emerald-500 items-center">
+                  <TrendingUp size={15} />
                   <p className="font-semibold">
                     {formatCurrency(data?.net.total)}
                   </p>
                 </div>
               )}
               {data && data.net.total === 0 && (
-                <div className="flex gap-2 text-gray-500 items-center">
-                  <MoveRight />
-                  <p className="font-semibold">{formatCurrency(netSavings)}</p>
+                <div className="flex gap-1 text-gray-500 items-center">
+                  <MoveRight size={15} />
+                  <p className="font-semibold">
+                    {formatCurrency(data?.net.total)}
+                  </p>
                 </div>
               )}
               {data && data.net.total < 0 && (
-                <div className="flex gap-2 text-red-500 items-center">
-                  <TrendingDown />
+                <div className="flex gap-1 text-red-500 items-center">
+                  <TrendingDown size={15} />
                   <p className="font-semibold">
-                    {formatCurrency(data?.net.total)}
+                    {formatCurrency(Math.abs(netSavings))}
                   </p>
                 </div>
               )}
@@ -126,31 +129,35 @@ const MonthlyPage = () => {
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card className="w-1/3">
+        {/* <Card className="w-1/4"></Card>
+        <Card className="w-1/4"></Card> */}
+        <Card className="w-1/4">
           <CardHeader>
-            <CardTitle className="flex justify-between text-lg">
-              <h2>Savings</h2>
+            <CardTitle className="flex justify-between text-sm">
+              <h2 className="text-lg">Savings</h2>
               {netSavings > 0 && (
-                <div className="flex gap-2 text-emerald-500 items-center">
-                  <TrendingUp />
+                <div className="flex gap-1 text-emerald-500 items-center">
+                  <TrendingUp size={15} />
                   <p className="font-semibold">{formatCurrency(netSavings)}</p>
                 </div>
               )}
               {netSavings === 0 && (
-                <div className="flex gap-2 text-gray-500 items-center">
-                  <MoveRight />
+                <div className="flex gap-1 text-gray-500 items-center">
+                  <MoveRight size={15} />
                   <p className="font-semibold">{formatCurrency(netSavings)}</p>
                 </div>
               )}
               {netSavings < 0 && (
-                <div className="flex gap-2 text-red-500 items-center">
-                  <TrendingDown />
-                  <p className="font-semibold">{formatCurrency(netSavings)}</p>
+                <div className="flex gap-1 text-red-500 items-center">
+                  <TrendingDown size={15} />
+                  <p className="font-semibold">
+                    {formatCurrency(Math.abs(netSavings))}
+                  </p>
                 </div>
               )}
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex items-center justify-center h-[90px]">
+          <CardContent className="flex items-center justify-center">
             <h3 className="text-xl font-bold">
               {formatCurrency(data?.savingsFunds.totalSavings ?? 0)}
             </h3>
@@ -159,44 +166,6 @@ const MonthlyPage = () => {
             <Link to="/savings" className="w-full">
               <Button variant="outline" className="w-full">
                 {formatCurrency(data?.savingsFunds.totalSavings ?? 0)} to
-                allocate
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-        <Card className="w-1/3">
-          <CardHeader>
-            <CardTitle className="flex justify-between text-lg">
-              <h2>Savings</h2>
-              {netSavings > 0 && (
-                <div className="flex gap-2 text-emerald-500 items-center">
-                  <TrendingUp />
-                  <p className="font-semibold">{formatCurrency(netSavings)}</p>
-                </div>
-              )}
-              {netSavings === 0 && (
-                <div className="flex gap-2 text-gray-500 items-center">
-                  <MoveRight />
-                  <p className="font-semibold">{formatCurrency(netSavings)}</p>
-                </div>
-              )}
-              {netSavings < 0 && (
-                <div className="flex gap-2 text-red-500 items-center">
-                  <TrendingDown />
-                  <p className="font-semibold">{formatCurrency(netSavings)}</p>
-                </div>
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center justify-center h-[90px]">
-            <h3 className="text-xl font-bold">
-              {formatCurrency(data?.savingsFunds.totalSavings ?? 0)}
-            </h3>
-          </CardContent>
-          <CardFooter>
-            <Link to="/savings" className="w-full">
-              <Button variant="outline" className="w-full">
-                {formatCurrency(data?.savingsFunds.unallocated ?? 0)} to
                 allocate
               </Button>
             </Link>
@@ -213,24 +182,30 @@ const MonthlyPage = () => {
       <div>this month vs the past 6 months, or this month last year?</div> */}
       <h1 className="text-xl">Transactions</h1>
       <Card>
-        <CardHeader>Income</CardHeader>
-        <CardContent>
-          <TransactionsTable
-            data={incomeTransactions}
-            totalRows={totalIncomeTransactions}
-            fetchPage={() => {}}
-          />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>Spending</CardHeader>
-        <CardContent>
-          <TransactionsTable
-            data={spendingTransactions}
-            totalRows={totalSpendingTransactions}
-            fetchPage={() => {}}
-          />
-        </CardContent>
+        <CardHeader>
+          <Tabs defaultValue="income" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="income">Income</TabsTrigger>
+              <TabsTrigger value="spending">Spending</TabsTrigger>
+            </TabsList>
+            <TabsContent value="income">
+              <TransactionsTable
+                data={incomeTransactions}
+                totalRows={totalIncomeTransactions}
+                fetchPage={() => {}}
+                loading={loading}
+              />
+            </TabsContent>
+            <TabsContent value="spending">
+              <TransactionsTable
+                data={spendingTransactions}
+                totalRows={totalSpendingTransactions}
+                fetchPage={() => {}}
+                loading={loading}
+              />
+            </TabsContent>
+          </Tabs>
+        </CardHeader>
       </Card>
     </Layout>
   );

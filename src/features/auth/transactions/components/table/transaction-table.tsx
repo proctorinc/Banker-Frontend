@@ -8,9 +8,15 @@ type Props = {
   data: Transaction[];
   totalRows: number;
   fetchPage: (pageSize: number, cursor: string | null) => void;
+  loading: boolean;
 };
 
-const TransactionsTable: FC<Props> = ({ data, totalRows, fetchPage }) => {
+const TransactionsTable: FC<Props> = ({
+  data,
+  totalRows,
+  fetchPage,
+  loading,
+}) => {
   const {
     pageSize,
     cursor,
@@ -38,6 +44,7 @@ const TransactionsTable: FC<Props> = ({ data, totalRows, fetchPage }) => {
       onPreviousPage={getPreviousPage}
       onFirstPage={getFirstPage}
       onLastPage={() => getLastPage(totalRows)}
+      loading={loading}
     />
   );
 };

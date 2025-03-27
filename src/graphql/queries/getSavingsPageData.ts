@@ -22,7 +22,6 @@ export const GET_SAVINGS_PAGE_DATA = gql(`
             node {
               id
               name
-              type
               goal
               total
               startDate

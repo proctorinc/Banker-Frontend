@@ -1,5 +1,6 @@
 import useUser from "@/features/auth/hooks/useUser";
 import {
+  Building2,
   Calendar,
   Coins,
   Landmark,
@@ -46,12 +47,12 @@ export const useSidebarContent = () => {
           };
         }),
       },
-      // {
-      //   title: "Budgets",
-      //   icon: PieChart,
-      //   url: "/budgets",
-      //   open: pathname.startsWith("/budgets"),
-      // },
+      {
+        title: "Merchants",
+        icon: Building2,
+        url: "/merchants",
+        isActive: pathname.startsWith("/merchants"),
+      },
       {
         title: "Transactions",
         icon: Receipt,

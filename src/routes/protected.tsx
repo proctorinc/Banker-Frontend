@@ -8,6 +8,8 @@ import UploadPage from "@/pages/upload/UploadPage";
 import MonthlyPage from "@/pages/monthly/MonthlyPage";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import { PaginationContextProvider } from "@/context/PaginationContext";
+import MerchantsPage from "@/features/merchants";
+import { MerchantsPageProviders } from "@/features/merchants/providers";
 
 export const App = () => {
   return (
@@ -49,6 +51,14 @@ export const protectedRoutes = [
       {
         path: "/account/:accountId",
         element: <Account />,
+      },
+      {
+        path: "/merchants",
+        element: (
+          <MerchantsPageProviders>
+            <MerchantsPage />
+          </MerchantsPageProviders>
+        ),
       },
       {
         path: "/transactions",
