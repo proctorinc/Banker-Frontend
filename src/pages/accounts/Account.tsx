@@ -16,6 +16,13 @@ import {
 import { Transaction } from "@/graphql/__generated__/graphql";
 import TransactionsTable from "@/features/auth/transactions/components/table/transaction-table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const Account = () => {
   const { accountId } = useParams();
@@ -24,7 +31,7 @@ const Account = () => {
       id: accountId as string,
       first: INITIAL_PAGE_SIZE,
     },
-    skip: accountId === undefined,
+    skip: !accountId,
   });
 
   const transactions =
@@ -48,42 +55,58 @@ const Account = () => {
 
   return (
     <PaginationContextProvider>
-      <Layout title="Account">
+      <Layout
+        title=<Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>Account</BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>{data?.account?.name}</BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      >
         <Card>
           <CardHeader>
-            <CardTitle>
-              <div className="flex w-full justify-between">
-                {loading && (
-                  <Skeleton className="w-[100px] h-[20px] rounded-xl" />
-                )}
-                {!loading && data && data.account && (
-                  <h1>{data.account.name}</h1>
-                )}
-                <CardDescription>
+            <CardTitle className="flex gap-3 items-center">
+              <Avatar className="bg-white rounded-full">
+                <AvatarImage src="/images/chase.png" />
+                <AvatarFallback>GnB</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col gap-1 w-full">
+                <div className="flex w-full justify-between">
                   {loading && (
-                    <Skeleton className="w-[150px] h-[20px] rounded-xl" />
+                    <Skeleton className="w-[100px] h-[20px] rounded-xl" />
                   )}
                   {!loading && data && data.account && (
-                    <>
-                      last sync:{" "}
-                      {new Date(data.account.lastSync.date).toLocaleString(
-                        "en-US",
-                        {
-                          month: "numeric",
-                          day: "numeric",
-                          year: "numeric",
-                          timeZone: "America/Los_Angeles",
-                        },
-                      )}
-                    </>
+                    <h1>{data.account.name}</h1>
                   )}
+                  <CardDescription>
+                    {loading && (
+                      <Skeleton className="w-[150px] h-[15px] rounded-xl" />
+                    )}
+                    {!loading && data && data.account && (
+                      <span className="font-medium">
+                        last sync:{" "}
+                        {new Date(data.account.lastSync.date).toLocaleString(
+                          "en-US",
+                          {
+                            month: "numeric",
+                            day: "numeric",
+                            year: "numeric",
+                            timeZone: "America/Los_Angeles",
+                          },
+                        )}
+                      </span>
+                    )}
+                  </CardDescription>
+                </div>
+                <CardDescription>
+                  {loading && (
+                    <Skeleton className="w-[50px] h-[20px] rounded-xl" />
+                  )}
+                  {!loading && data && data.account && data.account.type}
                 </CardDescription>
               </div>
             </CardTitle>
-            <CardDescription>
-              {loading && <Skeleton className="w-[50px] h-[20px] rounded-xl" />}
-              {!loading && data && data.account && data.account.type}
-            </CardDescription>
           </CardHeader>
         </Card>
         <Card>
@@ -92,6 +115,7 @@ const Account = () => {
           </CardHeader>
           <CardContent>
             <TransactionsTable
+              className="h-[50vh]"
               data={transactions}
               totalRows={totalTransactions}
               fetchPage={fetchPage}

@@ -67,6 +67,8 @@ export const SavingsFundsPie = () => {
           nameKey="label"
           innerRadius={90}
           strokeWidth={5}
+          animationDuration={1000}
+          animationBegin={0}
         >
           <Label
             content={({ viewBox }) => {

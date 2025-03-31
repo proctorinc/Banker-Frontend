@@ -4,14 +4,51 @@ import { Badge } from "@/components/ui/badge";
 import { Transaction } from "@/graphql/__generated__/graphql";
 import { formatCurrency } from "@/utils/utils";
 import CategoryIconSelector from "@/components/icons/CategoryIconSelector";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const columns: ColumnDef<Transaction>[] = [
+  {
+    id: "select",
+    enableSorting: false,
+    enableHiding: false,
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+  },
   {
     id: "category",
     accessorKey: "Category",
     cell: ({ row }) => {
       const transaction = row.original;
-      return <CategoryIconSelector category={transaction.category} />;
+      return (
+        <div className="flex justify-center">
+          <CategoryIconSelector
+            transactionId={transaction.id}
+            category={transaction.category}
+          />
+        </div>
+      );
     },
     size: 500,
   },
@@ -20,7 +57,23 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorKey: "Merchant",
     cell: ({ row }) => {
       const transaction = row.original as Transaction;
-      return <div className="line-clamp-1">{transaction.merchant.name}</div>;
+      return (
+        <Tooltip>
+          <TooltipTrigger className="text-left w-fit whitespace-nowrap overflow-clip overflow-ellipsis">
+            <Link
+              to={`/merchant/${transaction.merchant.id}`}
+              className="line-clamp-1"
+            >
+              <Button className="h-6" variant="ghost">
+                {transaction.merchant.name}
+              </Button>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            {transaction.merchant.name}
+          </TooltipContent>
+        </Tooltip>
+      );
     },
     size: 500,
   },
@@ -50,17 +103,10 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorKey: "Date",
     cell: ({ row }) => {
       const transaction = row.original as Transaction;
-      const date = new Date(transaction.date).toLocaleString("en-US", {
+      return new Date(transaction.date).toLocaleString("en-US", {
         month: "numeric",
         day: "numeric",
-        year: "numeric",
       });
-
-      return (
-        <Badge variant="secondary">
-          <div className="line-clamp-1">{date}</div>
-        </Badge>
-      );
     },
   },
 ];

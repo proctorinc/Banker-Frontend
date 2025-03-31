@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ColumnFiltersState,
   SortingState,
@@ -79,7 +77,7 @@ export const MerchantsDataTable = () => {
         />
         <MergeMerchantsModalButton merchants={selectedMerchants} />
       </div>
-      <ScrollArea className="relative rounded-md border h-[calc(80vh-150px)]">
+      <div className="border rounded-md overflow-hidden">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-gray-50">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -99,36 +97,41 @@ export const MerchantsDataTable = () => {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-3 ">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={merchantColumns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
         </Table>
-      </ScrollArea>
+        <ScrollArea className="relative rounded-md h-[calc(60vh)]">
+          <Table>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="h-8"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="px-3 ">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={merchantColumns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollArea>
+      </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getSelectedRowModel().rows.length} row(s) selected

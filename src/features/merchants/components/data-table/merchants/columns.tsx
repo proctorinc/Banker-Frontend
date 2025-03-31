@@ -10,6 +10,7 @@ import EditMerchantsButton from "@/features/merchants/modal/EditMerchantModalBut
 import { Merchant } from "@/graphql/__generated__/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const merchantColumns: ColumnDef<Merchant>[] = [
   {
@@ -45,15 +46,19 @@ export const merchantColumns: ColumnDef<Merchant>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Merchant
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
       <Tooltip>
-        <TooltipTrigger className="text-left w-[200px] whitespace-nowrap overflow-clip overflow-ellipsis">
-          {row.original.name}
+        <TooltipTrigger className="text-left w-fit whitespace-nowrap overflow-clip overflow-ellipsis">
+          <Link to={`/merchant/${row.original.id}`} className="line-clamp-1">
+            <Button className="h-6" variant="ghost">
+              {row.original.name}
+            </Button>
+          </Link>
         </TooltipTrigger>
         <TooltipContent side="bottom">{row.original.name}</TooltipContent>
       </Tooltip>
@@ -66,16 +71,18 @@ export const merchantColumns: ColumnDef<Merchant>[] = [
     enableSorting: false,
     enableGlobalFilter: false,
     cell: ({ row }) => (
-      <div className="w-[300px] overflow-clip">
-        {row.original.keys.map((key) => (
+      <div className="w-[300px] overflow-clip space-x-1">
+        {row.original.keys.length > 0 && (
           <Badge
-            key={key.id}
             variant="outline"
             className="font-light text-foreground font-mono"
           >
-            {key.keyMatch}
+            {row.original.keys[0].keyMatch}
           </Badge>
-        ))}
+        )}
+        {row.original.keys.length > 2 && (
+          <span className="text-xs">{`+${row.original.keys.length}`}</span>
+        )}
       </div>
     ),
   },

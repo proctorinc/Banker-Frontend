@@ -183,12 +183,15 @@ const MonthlyPage = () => {
       <h1 className="text-xl">Transactions</h1>
       <Card>
         <CardHeader>
-          <Tabs defaultValue="income" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+          <Tabs
+            defaultValue="income"
+            className="flex flex-col w-full items-center"
+          >
+            <TabsList className="grid grid-cols-2 w-[400px]">
               <TabsTrigger value="income">Income</TabsTrigger>
               <TabsTrigger value="spending">Spending</TabsTrigger>
             </TabsList>
-            <TabsContent value="income">
+            <TabsContent value="income" className="w-full">
               <TransactionsTable
                 data={incomeTransactions}
                 totalRows={totalIncomeTransactions}
@@ -196,7 +199,7 @@ const MonthlyPage = () => {
                 loading={loading}
               />
             </TabsContent>
-            <TabsContent value="spending">
+            <TabsContent value="spending" className="w-full">
               <TransactionsTable
                 data={spendingTransactions}
                 totalRows={totalSpendingTransactions}

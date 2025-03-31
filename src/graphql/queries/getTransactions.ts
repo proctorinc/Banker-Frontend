@@ -19,6 +19,7 @@ export const GET_TRANSACTIONS = gql(`
                 icon
             }
             merchant {
+              id
               name
               sourceId
             }

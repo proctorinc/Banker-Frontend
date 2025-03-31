@@ -10,6 +10,7 @@ import DashboardPage from "@/pages/dashboard/DashboardPage";
 import { PaginationContextProvider } from "@/context/PaginationContext";
 import MerchantsPage from "@/features/merchants";
 import { MerchantsPageProviders } from "@/features/merchants/providers";
+import MerchantPage from "@/features/merchants/MerchantPage";
 
 export const App = () => {
   return (
@@ -59,6 +60,10 @@ export const protectedRoutes = [
             <MerchantsPage />
           </MerchantsPageProviders>
         ),
+      },
+      {
+        path: "/merchant/:merchantId",
+        element: <MerchantPage />,
       },
       {
         path: "/transactions",

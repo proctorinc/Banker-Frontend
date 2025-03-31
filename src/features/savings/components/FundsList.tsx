@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreateSavingsFundButton } from "./create-savings/CreateSavingsFundButton";
-import { FundsTable } from "./data-grid/FundsTable";
 import { useSavingsPage } from "../hooks/useSavingsPage";
+import { FundsTable } from "./data-grid/FundsTable";
 
 export const FundsList = () => {
   const { fundsPagination } = useSavingsPage();

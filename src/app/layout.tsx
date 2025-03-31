@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { FC, ReactNode } from "react";
 
 type Props = {
-  title: string;
+  title: ReactNode;
   children: ReactNode;
 };
 
@@ -21,7 +21,7 @@ const Layout: FC<Props> = ({ title, children }) => {
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="w-full">
-            <h1>{title}</h1>
+            {typeof title === "string" ? <h1>{title}</h1> : title}
           </div>
         </header>
         <main className="flex pt-24 p-8 bg-gray-50 flex-grow justify-center w-full">

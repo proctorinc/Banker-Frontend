@@ -1,8 +1,8 @@
 import { gql } from "../__generated__";
 
 export const GET_MERCHANT = gql(`
-    query getMerchant($merchantId: ID!) {
-      merchant(id:$merchantId) {
+    query getMerchant($id: ID!, $first: Int!, $after: String) {
+      merchant(id: $id) {
         id
         name
         ownerId
@@ -13,7 +13,8 @@ export const GET_MERCHANT = gql(`
           uploadSource
         }
         transactions(page: {
-            first: 5
+          first: $first
+          after: $after
         }) {
             edges {
               node {

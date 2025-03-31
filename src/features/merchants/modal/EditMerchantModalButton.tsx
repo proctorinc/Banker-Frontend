@@ -9,32 +9,41 @@ import {
 import { FC, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Edit } from "lucide-react";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_MERCHANT } from "@/graphql/queries/getMerchant";
 import { Button } from "@/components/ui/button";
+import { INITIAL_PAGE_SIZE } from "@/context/PaginationContext";
 
 type Props = {
-  merchantId: string;
-  disabled?: boolean;
+  merchantId: string | undefined;
+  className?: string;
 };
 
-const EditMerchantsButton: FC<Props> = ({ merchantId }) => {
-  const { data, loading } = useQuery(GET_MERCHANT, {
-    variables: {
-      merchantId,
-    },
-  });
-  // const [merchantId, setMerchantId] = useState<Merchant | null>(null);
+const EditMerchantsButton: FC<Props> = ({ merchantId, className }) => {
+  const [merchantMutation, { data, loading }] = useLazyQuery(GET_MERCHANT);
   const [open, setOpen] = useState(false);
 
-  // function openModal(merchant: Merchant) {
-  //   setOpen(true)
-  // }
+  const handleOpen = (open: boolean) => {
+    setOpen(open);
+    if (merchantId) {
+      merchantMutation({
+        variables: {
+          id: merchantId,
+          first: INITIAL_PAGE_SIZE,
+        },
+      });
+    }
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="h-6" onClick={() => setOpen(true)}>
+        <Button
+          disabled={!merchantId}
+          variant="ghost"
+          className={className}
+          onClick={() => setOpen(true)}
+        >
           <Edit size={15} />
         </Button>
       </DialogTrigger>

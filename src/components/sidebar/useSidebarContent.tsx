@@ -51,7 +51,7 @@ export const useSidebarContent = () => {
         title: "Merchants",
         icon: Building2,
         url: "/merchants",
-        isActive: pathname.startsWith("/merchants"),
+        isActive: pathname.startsWith("/merchant"),
       },
       {
         title: "Transactions",

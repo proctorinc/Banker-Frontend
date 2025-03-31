@@ -40,6 +40,7 @@ const Transactions = () => {
           <Card>
             <CardHeader>
               <TransactionsTable
+                className="max-h-[65vh]"
                 data={transactions}
                 totalRows={totalTransactions}
                 fetchPage={fetchPage}

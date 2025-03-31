@@ -31,58 +31,60 @@ export const FundsTable = () => {
   }
 
   return (
-    <Table className="border-collapse rounded-xl">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="flex-2">Name</TableHead>
-          <TableHead className="w-[400px]">Goal</TableHead>
-          <TableHead className="text-right">This month</TableHead>
-          <TableHead className="text-right">Total</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data?.funds.edges.map((edge) => {
-          const fund = edge.node;
-          return (
-            <TableRow key={fund.id}>
-              <TableCell className="font-medium">{fund.name}</TableCell>
-              <TableCell>
-                {!!fund.goal && (
-                  <Tooltip>
-                    <TooltipContent>
-                      <span>
-                        {formatCurrency(fund.total)} /{" "}
-                        {formatCurrency(fund.goal)} -{" "}
-                        {((fund.total / fund.goal) * 100).toFixed(0)}%
-                      </span>
-                    </TooltipContent>
-                    <TooltipTrigger asChild>
-                      <Progress
-                        className="max-w-[200px]"
-                        value={(fund.total / fund.goal) * 100}
-                      />
-                    </TooltipTrigger>
-                  </Tooltip>
-                )}
-              </TableCell>
-              <TableCell
-                className={cn(
-                  "flex gap-1 items-center justify-end",
-                  getTextColor(fund.stats.net),
-                )}
-              >
-                {fund.stats.net > 0 && <TrendingUp size={15} />}
-                {fund.stats.net < 0 && <TrendingDown size={15} />}
-                {fund.stats.net === 0 && <MoveRight size={15} />}
-                <span>{formatCurrency(fund.stats.net, true)}</span>
-              </TableCell>
-              <TableCell className="text-right w-[100px]">
-                {formatCurrency(fund.total, true)}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div className="border rounded-md overflow-hidden">
+      <Table className="border-collapse rounded-xl">
+        <TableHeader className="bg-gray-50">
+          <TableRow>
+            <TableHead className="flex-2">Name</TableHead>
+            <TableHead className="w-[400px]">Goal</TableHead>
+            <TableHead className="text-right">This month</TableHead>
+            <TableHead className="text-right">Total</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data?.funds.edges.map((edge) => {
+            const fund = edge.node;
+            return (
+              <TableRow key={fund.id}>
+                <TableCell className="font-medium">{fund.name}</TableCell>
+                <TableCell>
+                  {!!fund.goal && (
+                    <Tooltip>
+                      <TooltipContent>
+                        <span>
+                          {formatCurrency(fund.total)} /{" "}
+                          {formatCurrency(fund.goal)} -{" "}
+                          {((fund.total / fund.goal) * 100).toFixed(0)}%
+                        </span>
+                      </TooltipContent>
+                      <TooltipTrigger asChild>
+                        <Progress
+                          className="max-w-[200px]"
+                          value={(fund.total / fund.goal) * 100}
+                        />
+                      </TooltipTrigger>
+                    </Tooltip>
+                  )}
+                </TableCell>
+                <TableCell
+                  className={cn(
+                    "flex gap-1 items-center justify-end",
+                    getTextColor(fund.stats.net),
+                  )}
+                >
+                  {fund.stats.net > 0 && <TrendingUp size={15} />}
+                  {fund.stats.net < 0 && <TrendingDown size={15} />}
+                  {fund.stats.net === 0 && <MoveRight size={15} />}
+                  <span>{formatCurrency(fund.stats.net, true)}</span>
+                </TableCell>
+                <TableCell className="text-right w-[100px]">
+                  {formatCurrency(fund.total, true)}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 };

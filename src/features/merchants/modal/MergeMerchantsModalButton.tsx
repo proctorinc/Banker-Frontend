@@ -36,32 +36,29 @@ const MergeMerchantsModalButton: FC<Props> = ({ merchants }) => {
     loading,
   } = useMergeMerchantsForm();
 
-  function openModal() {
-    setSelectedMerchants(merchants);
-    setOpen(true);
+  function toggleModal(open: boolean) {
+    if (open === true) {
+      setSelectedMerchants(merchants);
+      setName(merchants[0].name);
+    }
+    setOpen(open);
   }
 
   function mergeMerchants() {
     submitForm();
     setOpen(false);
+    setName("");
+    setSelectedMerchants([]);
   }
-
-  useEffect(() => {
-    if (selectedMerchants.length > 0) {
-      setName(selectedMerchants[0].name);
-    }
-  }, [selectedMerchants]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={toggleModal}>
       <DialogTrigger asChild>
-        <Button onClick={() => openModal()} disabled={merchants.length === 0}>
-          Merge
-        </Button>
+        <Button disabled={merchants.length === 0}>Merge</Button>
       </DialogTrigger>
       <DialogContent>
         {selectedMerchants.length > 0 && (

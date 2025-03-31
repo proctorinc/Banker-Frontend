@@ -22,6 +22,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { cn } from "@/lib/utils";
+import { Checkbox } from "../ui/checkbox";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -32,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   onFirstPage: () => void;
   onLastPage: () => void;
   loading?: boolean;
+  className?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,6 +46,7 @@ export function DataTable<TData, TValue>({
   onFirstPage,
   onLastPage,
   loading,
+  className,
 }: DataTableProps<TData, TValue>) {
   const { pageSize, pageIndex, setPaginationState } = usePaginate();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -80,9 +84,11 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div> */}
-      <ScrollArea className="rounded-md border overflow-y-scroll text-xs">
+      <ScrollArea
+        className={cn("rounded-md border overflow-y-auto text-xs", className)}
+      >
         <Table className="relative">
-          <TableHeader className="sticky bg-gray-50 top-0 w-full">
+          <TableHeader className="sticky top-0 bg-gray-50 w-full z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -106,8 +112,11 @@ export function DataTable<TData, TValue>({
                 { length: table.getState().pagination.pageSize },
                 (_, i) => (
                   <TableRow key={i}>
-                    <TableCell className="flex justify-center h-[30px]">
-                      <Skeleton className="w-[40px] h-[20px] rounded-xl" />
+                    <TableCell className="flex justify-center">
+                      <Checkbox className="bg-gray-50" disabled />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="w-[80px] h-[20px] rounded-xl" />
                     </TableCell>
                     <TableCell>
                       <Skeleton className="w-[200px] h-[20px] rounded-xl" />
@@ -116,10 +125,10 @@ export function DataTable<TData, TValue>({
                       <Skeleton className="w-[100px] h-[20px] rounded-xl" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="w-[300px] h-[20px] rounded-xl" />
+                      <Skeleton className="w-[200px] h-[20px] rounded-xl" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="w-[50px] h-[20px] rounded-xl" />
+                      <Skeleton className="w-[100px] h-[20px] rounded-xl" />
                     </TableCell>
                   </TableRow>
                 ),
@@ -132,7 +141,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-sm">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
