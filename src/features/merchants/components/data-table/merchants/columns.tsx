@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,9 +9,11 @@ import {
 } from "@/components/ui/tooltip";
 import EditMerchantsButton from "@/features/merchants/modal/EditMerchantModalButton";
 import { Merchant } from "@/graphql/__generated__/graphql";
+import { nameToColor } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import { MerchantLink } from "../../MerchantLink";
 
 export const merchantColumns: ColumnDef<Merchant>[] = [
   {
@@ -51,18 +54,7 @@ export const merchantColumns: ColumnDef<Merchant>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <Tooltip>
-        <TooltipTrigger className="text-left w-fit whitespace-nowrap overflow-clip overflow-ellipsis">
-          <Link to={`/merchant/${row.original.id}`} className="line-clamp-1">
-            <Button className="h-6" variant="ghost">
-              {row.original.name}
-            </Button>
-          </Link>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">{row.original.name}</TooltipContent>
-      </Tooltip>
-    ),
+    cell: ({ row }) => <MerchantLink merchant={row.original} />,
   },
   {
     id: "keys",
@@ -74,7 +66,7 @@ export const merchantColumns: ColumnDef<Merchant>[] = [
       <div className="w-[300px] overflow-clip space-x-1">
         {row.original.keys.length > 0 && (
           <Badge
-            variant="outline"
+            variant="secondary"
             className="font-light text-foreground font-mono"
           >
             {row.original.keys[0].keyMatch}
@@ -114,6 +106,8 @@ export const merchantColumns: ColumnDef<Merchant>[] = [
     enableHiding: false,
     enableSorting: false,
     enableGlobalFilter: false,
-    cell: ({ row }) => <EditMerchantsButton merchantId={row.original.id} />,
+    cell: ({ row }) => (
+      <EditMerchantsButton className="h-6" merchantId={row.original.id} />
+    ),
   },
 ];

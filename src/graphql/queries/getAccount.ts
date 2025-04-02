@@ -8,6 +8,11 @@ export const GET_ACCOUNT = gql(`
         type
         name
         routingNumber
+        balance
+        balanceHistory {
+            month
+            balance
+        }
         lastSync {
             date
             uploadSource
@@ -22,6 +27,7 @@ export const GET_ACCOUNT = gql(`
               amount
               date
               merchant {
+                id
                 name
                 sourceId
               }

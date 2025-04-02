@@ -80,7 +80,7 @@ const CategoryIconSelector: FC<Props> = ({ transactionId, category }) => {
       <PopoverContent className="absolute -left-10 w-[200px] p-0 max-h-[400px] overflow-y-scroll">
         <Command>
           {categories && categories.length > 10 && (
-            <CommandInput className="h-9" />
+            <CommandInput className="h-9" defaultValue={category?.icon} />
           )}
           <CommandList>
             <CommandEmpty>No category</CommandEmpty>

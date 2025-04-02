@@ -23,7 +23,10 @@ export const merchantColumns: ColumnDef<MerchantKey>[] = [
       );
     },
     cell: ({ row }) => (
-      <Badge variant="outline" className="font-light text-foreground font-mono">
+      <Badge
+        variant="secondary"
+        className="font-light text-foreground font-mono"
+      >
         {row.original.keyMatch}
       </Badge>
     ),

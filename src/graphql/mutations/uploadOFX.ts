@@ -4,14 +4,33 @@ export const UPLOAD_OFX = gql(`
     mutation uploadOFX($file: Upload!) {
         chaseOFXUpload(file: $file) {
             success
-            accounts {
-                updated
-                failed
+            data {
+              account {
+                type
+            	name
+            		routingNumber
+              }
+              transactions {
+                transaction {
+                    sourceId
+                    description
+                    amount
+                    payeeId
+                    payee
+                    payeeFull
+                    date
+                    isoCurrencyCode
+                    type
+                    checkNumber
+                }
+                merchant {
+                    merchantName
+                    keyMatch
+                    uploadSource
+                    sourceId
+                }
+              }
             }
-            transactions {
-                updated
-                failed
-            }
-        }
+          }
     }
 `);

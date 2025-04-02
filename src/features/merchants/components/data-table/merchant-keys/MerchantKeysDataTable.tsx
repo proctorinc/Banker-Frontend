@@ -43,9 +43,7 @@ export const MerchantKeysDataTable: FC<Props> = ({ merchants }) => {
   });
   const { keys, setKeys } = useMergeMerchantsForm();
   const [newKey, setNewKey] = useState("");
-  const [sorting, setSorting] = useState<SortingState>([
-    // { id: "include", desc: true },
-  ]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
