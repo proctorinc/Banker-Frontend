@@ -41,6 +41,8 @@ export const MergeMerchantsContextProvider: FC<
     refetchQueries: [{ query: GET_MERCHANTS }],
   });
 
+  console.log(selectedKeys);
+
   function submitForm() {
     if (
       name &&

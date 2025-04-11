@@ -1,6 +1,17 @@
+import { PrimaryIncomeFlow } from "@/graphql/__generated__/graphql";
 import type { Node, BuiltInNode } from "@xyflow/react";
 
-export type PositionLoggerNode = Node<
+export type MerchantIncomeNode = Node<
+  {
+    primaryIncome: PrimaryIncomeFlow;
+    handleLeft?: boolean;
+    handleRight?: boolean;
+    handleTop?: boolean;
+    handleBottom?: boolean;
+  },
+  "merchant-income-node"
+>;
+export type BasicNode = Node<
   {
     label: string;
     value: number;
@@ -9,6 +20,6 @@ export type PositionLoggerNode = Node<
     handleTop?: boolean;
     handleBottom?: boolean;
   },
-  "position-logger"
+  "basic-node"
 >;
-export type AppNode = BuiltInNode | PositionLoggerNode;
+export type AppNode = BuiltInNode | MerchantIncomeNode | BasicNode;

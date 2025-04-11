@@ -1,11 +1,5 @@
 import Layout from "@/app/layout";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GET_ACCOUNT } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
@@ -13,19 +7,25 @@ import {
   INITIAL_PAGE_SIZE,
   PaginationContextProvider,
 } from "@/context/PaginationContext";
-import { Transaction } from "@/graphql/__generated__/graphql";
+import {
+  Account as AccountType,
+  Transaction,
+} from "@/graphql/__generated__/graphql";
 import TransactionsTable from "@/features/auth/transactions/components/table/transaction-table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { formatCurrency } from "@/utils/utils";
+
+import { formatCurrency, nameToColor } from "@/utils/utils";
 import { AccountBalanceHistoryChart } from "./AccountBalanceHistoryChart";
+import EditAccountModal from "./components/modals/EditAccountModal";
+import { Label } from "@/components/ui/label";
+import { AccountLogo } from "./AccountLogo";
 
 const Account = () => {
   const { accountId } = useParams();
@@ -59,89 +59,85 @@ const Account = () => {
   return (
     <PaginationContextProvider>
       <Layout
-        title=<Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>Account</BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>{data?.account?.name}</BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        title={
+          <Breadcrumb>
+            <BreadcrumbList className="flex gap-0">
+              <BreadcrumbItem>
+                <BreadcrumbLink>Accounts</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                {loading ? (
+                  <Skeleton className="w-[100px] h-[16px] rounded-xl" />
+                ) : (
+                  <BreadcrumbLink>{data?.account?.name}</BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
       >
         <Card>
           <CardHeader>
-            <CardTitle className="flex flex-col gap-5">
+            <CardTitle className="flex flex-col gap-3">
               <div className="flex gap-3 items-center">
-                <Avatar className="bg-white rounded-full">
-                  <AvatarImage src="/images/chase.png" />
-                  <AvatarFallback>GnB</AvatarFallback>
-                </Avatar>
                 <div className="flex flex-col gap-1 w-full">
-                  <div className="flex w-full justify-between">
+                  <div className="flex w-full items-center gap-3">
+                    {!loading && data?.account && (
+                      <AccountLogo
+                        account={data.account as AccountType}
+                        size="lg"
+                      />
+                    )}
                     {loading && (
-                      <Skeleton className="w-[100px] h-[20px] rounded-xl" />
+                      <div className="flex gap-2 items-center">
+                        <Skeleton className="w-12 h-12 rounded-full" />
+                        <div className="space-y-2">
+                          <Skeleton className="w-[125px] h-[16px] rounded-xl" />
+                          <Skeleton className="w-[75px] h-[16px] rounded-xl" />
+                        </div>
+                      </div>
                     )}
-                    {!loading && data && data.account && (
-                      <h1>{data.account.name}</h1>
+                    {!loading && data?.account && (
+                      <div className="flex flex-col gap-2 w-fit">
+                        <h1>{data.account.name}</h1>
+                        <Label className="text-muted-foreground">
+                          {data.account.type}
+                        </Label>
+                      </div>
                     )}
-                    <CardDescription>
-                      {loading && (
-                        <Skeleton className="w-[150px] h-[15px] rounded-xl" />
-                      )}
-                      {!loading && data && data.account && (
-                        <span className="font-medium">
-                          last sync:{" "}
-                          {new Date(data.account.lastSync.date).toLocaleString(
-                            "en-US",
-                            {
-                              month: "numeric",
-                              day: "numeric",
-                              year: "numeric",
-                              timeZone: "America/Los_Angeles",
-                            },
-                          )}
-                        </span>
-                      )}
-                    </CardDescription>
+                    {data?.account && (
+                      <EditAccountModal account={data.account as AccountType} />
+                    )}
                   </div>
-                  <CardDescription>
-                    {loading && (
-                      <Skeleton className="w-[50px] h-[20px] rounded-xl" />
-                    )}
-                    {!loading && data && data.account && data.account.type}
-                  </CardDescription>
                 </div>
-              </div>
-              <Separator />
-              <div className="flex gap-5 items-center">
-                <div className="flex flex-col gap-1">
-                  <span>
-                    {formatCurrency(data?.account?.balance ?? 0, true)}
-                  </span>
-                  <span className="font-normal text-muted-foreground text-sm">
-                    Balance
-                  </span>
-                </div>
-                <AccountBalanceHistoryChart
-                  data={data?.account?.balanceHistory ?? []}
-                />
               </div>
             </CardTitle>
           </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
-          </CardHeader>
           <CardContent>
-            <TransactionsTable
-              className="h-[40vh]"
-              data={transactions}
-              totalRows={totalTransactions}
-              fetchPage={fetchPage}
-              loading={loading}
-            />
+            <div className="flex gap-5 items-center">
+              <div className="flex flex-col gap-1 w-36">
+                <h3 className="font-semibold">
+                  {formatCurrency(data?.account?.balance ?? 0, true)}
+                </h3>
+                <span className="text-muted-foreground text-sm line-clamp-1">
+                  Current balance
+                </span>
+              </div>
+              <AccountBalanceHistoryChart
+                color={nameToColor(data?.account?.name ?? "")}
+                data={data?.account?.balanceHistory ?? []}
+              />
+            </div>
           </CardContent>
         </Card>
+        <TransactionsTable
+          className="h-[58vh]"
+          data={transactions}
+          totalRows={totalTransactions}
+          fetchPage={fetchPage}
+          loading={loading}
+        />
       </Layout>
     </PaginationContextProvider>
   );

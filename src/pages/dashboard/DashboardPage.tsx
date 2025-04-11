@@ -44,9 +44,6 @@ const DashboardPage = () => {
 
   return (
     <Layout title="Overview">
-      <div className="flex w-full items-center justify-between">
-        <h1 className="text-xl prose">Overview</h1>
-      </div>
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex justify-between text-lg">

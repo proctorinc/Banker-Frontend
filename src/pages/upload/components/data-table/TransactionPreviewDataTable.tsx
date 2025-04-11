@@ -10,7 +10,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -26,12 +25,12 @@ import { TransactionPreview } from "@/graphql/__generated__/graphql";
 import { cn } from "@/lib/utils";
 
 type Props = {
-  data: TransactionPreview[];
+  data?: TransactionPreview[];
   className?: string;
 };
 
 export const TransactionsPreviewDataTable: FC<Props> = ({
-  data,
+  data = [],
   className,
 }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -66,17 +65,7 @@ export const TransactionsPreviewDataTable: FC<Props> = ({
 
   return (
     <div className="w-full">
-      {/* <div className="flex justify-between items-center py-4">
-        <Input
-          placeholder="Search..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div> */}
-      <div className="border rounded-md overflow-hidden">
+      <div className="border rounded-xl overflow-hidden">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-gray-50">
             {table.getHeaderGroups().map((headerGroup) => (

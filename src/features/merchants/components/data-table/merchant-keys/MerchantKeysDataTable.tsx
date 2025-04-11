@@ -95,7 +95,7 @@ export const MerchantKeysDataTable: FC<Props> = ({ merchants }) => {
 
   return (
     <div className="w-full">
-      <ScrollArea className="relative rounded-md border h-[calc(40vh)]">
+      <ScrollArea className="relative rounded-xl border h-[calc(40vh)]">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-gray-50">
             {table.getHeaderGroups().map((headerGroup) => (

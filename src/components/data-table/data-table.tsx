@@ -19,7 +19,6 @@ import {
 } from "@tanstack/react-table";
 import usePaginate from "@/hooks/usePaginate";
 import { ScrollArea } from "../ui/scroll-area";
-import { Input } from "../ui/input";
 import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -85,7 +84,7 @@ export function DataTable<TData, TValue>({
         />
       </div> */}
       <ScrollArea
-        className={cn("rounded-md border overflow-y-auto text-xs", className)}
+        className={cn("rounded-xl border overflow-y-auto text-xs", className)}
       >
         <Table className="relative">
           <TableHeader className="sticky top-0 bg-gray-50 w-full z-10">

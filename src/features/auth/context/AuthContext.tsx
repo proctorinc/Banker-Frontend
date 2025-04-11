@@ -27,7 +27,6 @@ const AuthContext = createContext<AuthContext | null>(null);
 export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const [searchParams, _setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loginMutation] = useMutation(LOGIN);
@@ -36,7 +35,9 @@ export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
   function login(params: LoginParams) {
     loginMutation({
       variables: params,
-    }).then(() => loadUser());
+    })
+      .then(() => loadUser())
+      .then(() => goToHomePage());
   }
 
   const isAuthenticated = !!currentUser;
@@ -52,15 +53,22 @@ export const AuthContextProvider: FC<AuthProviderProps> = ({ children }) => {
       });
   }
 
+  function goToHomePage() {
+    navigate("/");
+  }
+
   function goToLoginPage() {
     const path = location.pathname;
     if (!path.startsWith("/login")) {
+      console.log("Sending to login page");
       navigate({
         pathname: "/login",
         search: createSearchParams({
           from: path,
         }).toString(),
       });
+    } else {
+      console.log("Already on login page");
     }
   }
 

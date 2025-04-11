@@ -12,14 +12,22 @@ export const GET_ME = gql(`
         }) {
           edges {
             node {
-              id
-              type
-              name
-              routingNumber
-              lastSync {
-                  date
-                  uploadSource
-              }
+                id
+                sourceId
+                type
+                name
+                routingNumber
+                logoUrl
+                lastTransactionDate
+                balance
+                balanceHistory {
+                    month
+                    balance
+                }
+                lastSync {
+                    date
+                    uploadSource
+                }
             }
             cursor
           }

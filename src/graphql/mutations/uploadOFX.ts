@@ -5,11 +5,18 @@ export const UPLOAD_OFX = gql(`
         chaseOFXUpload(file: $file) {
             success
             data {
-              account {
-                type
-            	name
-            		routingNumber
-              }
+                account {
+                    type
+                    name
+                    routingNumber
+                    initialBalance
+                    duplicate {
+                        type
+                        name
+                        routingNumber
+                        logoUrl
+                    }
+                }
               transactions {
                 transaction {
                     sourceId
@@ -22,6 +29,24 @@ export const UPLOAD_OFX = gql(`
                     isoCurrencyCode
                     type
                     checkNumber
+                    duplicate {
+                        id
+                        description
+                        amount
+                        payeeId
+                        payee
+                        payeeFull
+                        date
+                        isoCurrencyCode
+                        type
+                        checkNumber
+                        merchant {
+                            id
+                            name
+                            sourceId
+                            logoUrl
+                        }
+                    }
                 }
                 merchant {
                     merchantName

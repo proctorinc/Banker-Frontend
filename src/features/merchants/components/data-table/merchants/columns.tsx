@@ -1,18 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import EditMerchantsButton from "@/features/merchants/modal/EditMerchantModalButton";
 import { Merchant } from "@/graphql/__generated__/graphql";
-import { nameToColor } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { Link } from "react-router-dom";
 import { MerchantLink } from "../../MerchantLink";
 
 export const merchantColumns: ColumnDef<Merchant>[] = [
@@ -106,8 +97,7 @@ export const merchantColumns: ColumnDef<Merchant>[] = [
     enableHiding: false,
     enableSorting: false,
     enableGlobalFilter: false,
-    cell: ({ row }) => (
-      <EditMerchantsButton className="h-6" merchantId={row.original.id} />
-    ),
+    cell: ({ row }) => "edit",
+    // <EditMerchantsButton className="h-6" merchantId={row.original.id} />
   },
 ];

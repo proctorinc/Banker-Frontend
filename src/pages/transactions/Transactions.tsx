@@ -1,5 +1,5 @@
 import Layout from "@/app/layout";
-import { Card, CardHeader } from "@/components/ui/card";
+
 import { GET_TRANSACTIONS } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 import {
@@ -36,19 +36,13 @@ const Transactions = () => {
   return (
     <PaginationContextProvider>
       <Layout title="Transactions">
-        <div className="flex flex-1 flex-col gap-4">
-          <Card>
-            <CardHeader>
-              <TransactionsTable
-                className="max-h-[65vh]"
-                data={transactions}
-                totalRows={totalTransactions}
-                fetchPage={fetchPage}
-                loading={loading}
-              />
-            </CardHeader>
-          </Card>
-        </div>
+        <TransactionsTable
+          className="max-h-[78vh]"
+          data={transactions}
+          totalRows={totalTransactions}
+          fetchPage={fetchPage}
+          loading={loading}
+        />
       </Layout>
     </PaginationContextProvider>
   );

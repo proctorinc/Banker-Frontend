@@ -1,11 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 import {
   ColumnFiltersState,
@@ -22,7 +15,6 @@ import { FC, useEffect } from "react";
 import { Transaction } from "@/graphql/__generated__/graphql";
 import { columns } from "./columns";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 
@@ -129,8 +121,8 @@ const TransactionsTable: FC<Props> = ({
           className="max-w-sm"
         />
       </div> */}
-      <div className="border rounded-md overflow-hidden">
-        <Table className="relative">
+      <div className="border rounded-xl overflow-hidden">
+        {/* <Table className="relative">
           <TableHeader className="sticky top-0 bg-gray-50 w-full z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -149,17 +141,28 @@ const TransactionsTable: FC<Props> = ({
               </TableRow>
             ))}
           </TableHeader>
-        </Table>
+        </Table> */}
         <ScrollArea className={cn("overflow-y-auto text-xs", className)}>
           <Table>
             <TableBody>
+              {/* {loading && (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="flex justify-center w-full bg-gray-100"
+                  ></TableCell>
+                </TableRow>
+              )} */}
               {loading &&
                 Array.from(
                   { length: table.getState().pagination.pageSize },
                   (_, i) => (
                     <TableRow key={i}>
-                      <TableCell className="flex justify-center">
-                        <Checkbox className="bg-gray-50" disabled />
+                      <TableCell>
+                        <Skeleton className="w-[40px] h-[20px] rounded-xl" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="w-[40px] h-[20px] rounded-xl" />
                       </TableCell>
                       <TableCell>
                         <Skeleton className="w-[80px] h-[20px] rounded-xl" />

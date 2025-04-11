@@ -8,8 +8,7 @@ import {
 
 const SavingsPage = () => {
   return (
-    <Layout title="Savings">
-      <SavingsTitle />
+    <Layout title={<SavingsTitle />}>
       <SavingsHistory />
       <SavingsInsights />
       <FundsList />

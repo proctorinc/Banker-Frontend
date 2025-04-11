@@ -7,7 +7,9 @@ export const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
   // const commonRoutes = [{ path: "*", element: <div>Not Found</div> }];
 
-  const routes = isAuthenticated ? protectedRoutes : publicRoutes;
+  const routes = isAuthenticated
+    ? [...protectedRoutes, ...publicRoutes]
+    : publicRoutes;
   const element = useRoutes([...routes]);
 
   return <>{element}</>;

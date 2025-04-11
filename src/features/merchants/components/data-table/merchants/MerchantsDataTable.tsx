@@ -77,7 +77,7 @@ export const MerchantsDataTable = () => {
         />
         <MergeMerchantsModalButton merchants={selectedMerchants} />
       </div>
-      <div className="border rounded-md overflow-hidden">
+      <div className="border rounded-xl overflow-hidden">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-gray-50">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -98,7 +98,7 @@ export const MerchantsDataTable = () => {
             ))}
           </TableHeader>
         </Table>
-        <ScrollArea className="relative rounded-md h-[calc(60vh)]">
+        <ScrollArea className="relative rounded-xl h-[calc(65vh)]">
           <Table>
             <TableBody>
               {table.getRowModel().rows?.length ? (

@@ -21,19 +21,33 @@ export const GET_STATS = gql(`
     ) {
         total
         transactions(page: {
-            first: 5
+            first: 50
         }) {
             edges {
                 node {
-                  id
-                  description
-                  amount
-                  payee
-                  date
-                  merchant {
-                    name
-                    sourceId
-                  }
+                    id
+                      description
+                      amount
+                      payee
+                      date
+                      category {
+                          name
+                          color
+                          icon
+                      }
+                      # merchant {
+                      #     id
+                      #     name
+                      #     sourceId
+                      #     logoUrl
+                      #     linkedAccountId
+                      #     isPrimaryIncome
+                      #     linkedCategory {
+                      #         name
+                      #         color
+                      #         icon
+                      #     }
+                      # }
                 }
                 cursor
             }
@@ -54,28 +68,42 @@ export const GET_STATS = gql(`
     ) {
         total
         transactions(page: {
-            first: 5
+            first: 50
         }) {
             edges {
-                node {
-                  id
-                  description
-                  amount
-                  payee
-                  date
-                  merchant {
-                    name
-                    sourceId
-                  }
+                    node {
+                        id
+                          description
+                          amount
+                          payee
+                          date
+                          category {
+                              name
+                              color
+                              icon
+                          }
+                          merchant {
+                              id
+                              name
+                              sourceId
+                              logoUrl
+                              linkedAccountId
+                              isPrimaryIncome
+                              linkedCategory {
+                                  name
+                                  color
+                                  icon
+                              }
+                          }
+                    }
+                    cursor
                 }
-                cursor
+                pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                    totalCount
+                }
             }
-            pageInfo {
-                hasNextPage
-                hasPreviousPage
-                totalCount
-            }
-        }
     }
     net(
         input: {

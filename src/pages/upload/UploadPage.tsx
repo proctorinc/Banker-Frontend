@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import TransactionsTable from "@/features/auth/transactions/components/table/transaction-table";
 import { useMutation } from "@apollo/client";
 import { UPLOAD_OFX } from "@/graphql/mutations/uploadOFX";
 import { GET_ME } from "@/graphql/queries";
@@ -23,10 +22,13 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { Upload } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import { Label } from "@/components/ui/label";
+import { Logo } from "@/components/logo/Logo";
 
 const UploadPage = () => {
-  const [uploadMutation, { data, loading, called, error }] =
-    useMutation(UPLOAD_OFX);
+  const [uploadMutation, { data, loading, called }] = useMutation(UPLOAD_OFX);
   const [uploadType, setUploadType] = useState("chase-qfx");
 
   function uploadOFX(file: File) {
@@ -37,6 +39,9 @@ const UploadPage = () => {
       refetchQueries: [{ query: GET_ME }],
     });
   }
+
+  const account = data?.chaseOFXUpload.data[0].account;
+  const existingAccount = account?.duplicate;
 
   return (
     <Layout title="Upload">
@@ -72,16 +77,14 @@ const UploadPage = () => {
           <CardHeader>
             <UploadForm onSubmit={uploadOFX} />
             <CardDescription>
-              Navigate{" "}
               <Link
                 className="text-blue-500 underline"
                 to="https://secure.chase.com/web/auth/dashboard#/dashboard/accountDetails/downloadAccountTransactions/index;"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                here
-              </Link>{" "}
-              to download:
+                Download from Chase
+              </Link>
             </CardDescription>
           </CardHeader>
         </Card>
@@ -101,19 +104,46 @@ const UploadPage = () => {
       {called && (
         <Card>
           <CardHeader>
-            <span>{data?.chaseOFXUpload.data[0].account.name}</span>
-            <CardDescription>
-              <span>
-                {data?.chaseOFXUpload.data[0].account.type}
-                {data?.chaseOFXUpload.data[0].account.routingNumber &&
-                  ` ${data?.chaseOFXUpload.data[0].account.routingNumber}`}
-              </span>
-            </CardDescription>
+            <div className="flex w-full items-center gap-3">
+              {loading && (
+                <div className="flex gap-2 items-center">
+                  <Skeleton className="w-12 h-12 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="w-[75px] h-[16px] rounded-xl" />
+                    <Skeleton className="w-[125px] h-[16px] rounded-xl" />
+                  </div>
+                </div>
+              )}
+              {!loading && existingAccount && (
+                <Logo
+                  name={existingAccount.name}
+                  logoUrl={existingAccount.logoUrl}
+                  size="lg"
+                />
+              )}
+              {!loading && existingAccount && (
+                <div className="space-y-2">
+                  <h1>{existingAccount.name}</h1>
+                  <Label className="text-muted-foreground">
+                    {existingAccount.type}
+                  </Label>
+                </div>
+              )}
+              {!loading && account && !existingAccount && (
+                <div className="space-y-2">
+                  <h1>New Account:</h1>
+                  <CardDescription>
+                    <h1>{account.name}</h1>
+                    <Badge>{account.type}</Badge>
+                  </CardDescription>
+                </div>
+              )}
+            </div>
           </CardHeader>
           <CardContent className="flex text-left flex-col">
             <TransactionsPreviewDataTable
               className="h-[40vh]"
-              data={data?.chaseOFXUpload.data[0].transactions ?? []}
+              data={data?.chaseOFXUpload.data[0].transactions}
             />
           </CardContent>
         </Card>

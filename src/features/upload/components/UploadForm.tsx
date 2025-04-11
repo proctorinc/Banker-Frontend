@@ -1,5 +1,4 @@
-import { FC, FormEvent } from "react";
-import { Button } from "@/components/ui/button";
+import { FC } from "react";
 
 type Props = {
   onSubmit: (file: File) => void;

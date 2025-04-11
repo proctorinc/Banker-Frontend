@@ -20,7 +20,7 @@ export const SavingsInsights = () => {
   const { data, fundsPagination } = useSavingsPage();
 
   return (
-    <div className="flex gap-6 w-full">
+    <div className="flex gap-4 w-full">
       <Card className="flex flex-col flex-grow relative items-center justify-center">
         <CardHeader className="absolute top-0 w-full">
           <div className="flex w-full justify-between z-10">
@@ -34,7 +34,7 @@ export const SavingsInsights = () => {
         </CardHeader>
         <SavingsFundsPie />
       </Card>
-      <div className="flex flex-col gap-6 w-[320px] text-lg">
+      <div className="flex flex-col gap-4 w-[320px] text-lg">
         <Card>
           <CardHeader className="flex flex-row gap-5 items-center">
             <Badge

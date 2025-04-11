@@ -17,10 +17,9 @@ export const SavingsHistory = () => {
 
   return (
     <Card className="w-full">
-      <CardHeader></CardHeader>
-      <CardContent>
+      <CardHeader className="p-2 pb-0">
         <SavingsHistoryBar chartData={savingsData} />
-      </CardContent>
+      </CardHeader>
     </Card>
   );
 };

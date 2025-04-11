@@ -35,7 +35,8 @@ import { useSidebarContent } from "./useSidebarContent";
 import useAuth from "@/features/auth/hooks/useAuth";
 import useUser from "@/features/auth/hooks/useUser";
 import { Link } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+
+import { AccountLogo } from "@/pages/accounts/AccountLogo";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { logout } = useAuth();
@@ -90,21 +91,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {item.items.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubItem key={item.account.id}>
                             <SidebarMenuSubButton
                               asChild
                               isActive={item.isActive}
                             >
-                              <Link
-                                to={item.url}
-                                className="flex gap-1 items-center"
-                              >
-                                <Avatar className="w-6 h-6 bg-white rounded-full">
-                                  <AvatarImage src="/images/chase.png" />
-                                  <AvatarFallback>GnB</AvatarFallback>
-                                </Avatar>
+                              <Link to={item.url}>
+                                <AccountLogo size="sm" account={item.account} />
                                 <span className="whitespace-nowrap text-ellipsis">
-                                  {item.title}
+                                  {item.account.name}
                                 </span>
                                 {item?.warning && (
                                   <CircleAlert

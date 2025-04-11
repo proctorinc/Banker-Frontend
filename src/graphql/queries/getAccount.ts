@@ -1,13 +1,15 @@
 import { gql } from "../__generated__";
 
 export const GET_ACCOUNT = gql(`
-    query getAccount($id: ID!, $first: Int!, $after: String) {
+    query getAccount($id: ID!, $first: Int, $after: String) {
       account(id: $id) {
         id
         sourceId
         type
         name
         routingNumber
+        logoUrl
+        lastTransactionDate
         balance
         balanceHistory {
             month
@@ -23,14 +25,29 @@ export const GET_ACCOUNT = gql(`
         }) {
           edges {
             node {
-              description
-              amount
-              date
-              merchant {
                 id
-                name
-                sourceId
-              }
+                description
+                amount
+                payee
+                date
+                category {
+                    name
+                    color
+                    icon
+                }
+                merchant {
+                    id
+                    name
+                    sourceId
+                    logoUrl
+                    linkedAccountId
+                    isPrimaryIncome
+                    linkedCategory {
+                        name
+                        color
+                        icon
+                    }
+                }
             }
             cursor
           }

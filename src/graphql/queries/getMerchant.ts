@@ -1,16 +1,36 @@
 import { gql } from "../__generated__";
 
 export const GET_MERCHANT = gql(`
-    query getMerchant($id: ID!, $first: Int!, $after: String) {
+    query getMerchant(
+        $id: ID!,
+        $first: Int!,
+        $after: String,
+        $startDate: Date!,
+        $endDate: Date!
+    ) {
       merchant(id: $id) {
         id
         name
-        ownerId
         sourceId
+        logoUrl
+        linkedAccountId
+        isPrimaryIncome
+        linkedCategory {
+            name
+            color
+            icon
+        }
         keys {
           id
           keyMatch
           uploadSource
+        }
+        spendingHistory(input: {
+            startDate: $startDate
+            endDate: $endDate
+        }) {
+            month
+            balance
         }
         transactions(page: {
           first: $first
@@ -24,8 +44,17 @@ export const GET_MERCHANT = gql(`
                 payee
                 date
                 merchant {
-                  name
-                  sourceId
+                    id
+                    name
+                    sourceId
+                    logoUrl
+                    linkedAccountId
+                    isPrimaryIncome
+                }
+                category {
+                    name
+                    color
+                    icon
                 }
               }
               cursor

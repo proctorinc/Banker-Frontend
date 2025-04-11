@@ -1,6 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Transaction } from "@/graphql/__generated__/graphql";
+import {
+  Transaction,
+  TransactionCategory,
+} from "@/graphql/__generated__/graphql";
 import { formatCurrency } from "@/utils/utils";
 import CategoryIconSelector from "@/components/icons/CategoryIconSelector";
 import { Button } from "@/components/ui/button";
@@ -52,28 +55,16 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorKey: "Category",
     cell: ({ row }) => {
       const transaction = row.original;
+      const category = transaction.category as TransactionCategory | undefined;
       return (
         <div className="flex justify-center">
-          {transaction.category && (
-            <CategoryIconSelector
-              transactionId={transaction.id}
-              category={transaction.category}
-            />
-          )}
-          {transaction?.category?.name}
+          <CategoryIconSelector
+            transactionId={transaction.id}
+            category={category}
+          />
         </div>
       );
     },
-    size: 500,
-  },
-  {
-    id: "merchant",
-    accessorKey: "Merchant",
-    cell: ({ row }) => {
-      const transaction = row.original as Transaction;
-      return <MerchantLink merchant={transaction.merchant} />;
-    },
-    size: 500,
   },
   {
     id: "amount",
@@ -87,15 +78,27 @@ export const columns: ColumnDef<Transaction>[] = [
       );
     },
   },
-  // {
-  //   id: "description",
-  //   accessorKey: "Description",
-  //   enableGlobalFilter: true,
-  //   cell: ({ row }) => {
-  //     const transaction = row.original as Transaction;
-  //     return <div className="line-clamp-1">{transaction.description}</div>;
-  //   },
-  // },
+  {
+    id: "merchant",
+    accessorKey: "Merchant",
+    cell: ({ row }) => {
+      const transaction = row.original as Transaction;
+      return <MerchantLink merchant={transaction.merchant} />;
+    },
+  },
+  {
+    id: "description",
+    accessorKey: "Description",
+    enableGlobalFilter: true,
+    cell: ({ row }) => {
+      const transaction = row.original as Transaction;
+      return (
+        <div className="text-xs line-clamp-1 font-light text-foreground font-mono text-ellipsis">
+          {transaction.description}
+        </div>
+      );
+    },
+  },
   {
     header: "Actions",
     id: "actions",

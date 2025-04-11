@@ -6,7 +6,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useMemo } from "react";
-import { formatCurrency } from "@/utils/utils";
+import { formatCurrency, nameToColor } from "@/utils/utils";
 import { useSavingsPage } from "../../hooks/useSavingsPage";
 
 const chartConfig = {
@@ -41,11 +41,11 @@ export const SavingsFundsPie = () => {
     return data
       ? data.funds.edges
           .filter((edge) => edge.node.total > 0)
-          .map((edge, i) => {
+          .map((edge) => {
             return {
               label: edge.node.name,
               total: edge.node.total,
-              fill: `hsl(var(--chart-${(i % 4) + 3}))`,
+              fill: nameToColor(edge.node.name),
             };
           })
       : [];

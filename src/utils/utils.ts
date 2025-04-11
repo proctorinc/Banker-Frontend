@@ -24,24 +24,49 @@ export function formatCurrency(value: number, full = false) {
   }
 }
 
-// export function nameToColor(name: string) {
-//   let hash = 0;
-//   for (let i = 0; i < name.length; i++) {
-//     hash = name.charCodeAt(i) + ((hash << 5) - hash);
-//   }
-//   const hue = hash % 360;
-//   return `hsl(${hue}, 70%, 60%)`;
-// }
-
 export function nameToColor(name: string) {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  const hue = ((hash % 360) + 360) % 360; // Ensuring a positive hue
-  const saturation = 60; // Keep saturation in [65, 85] for vibrancy
-  const lightness = 70; //55 + (hash % 10); // Keep lightness in [55, 65] for readability
+  const hue = ((hash % 360) + 360) % 360;
+  const saturation = 60;
+  const lightness = 70;
 
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+export function nameToTextColor(name: string) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const hue = ((hash % 360) + 360) % 360;
+  const saturation = 60;
+  const lightness = 25;
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+export function getTwoCapitalLetters(input: string): string {
+  const cleaned = input.trim();
+
+  const words = cleaned
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/[_\-.]+/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+
+  let initials = "";
+  if (words.length >= 2) {
+    initials = words[0][0] + words[1][0];
+  } else if (words.length === 1) {
+    initials = words[0].slice(0, 2);
+  } else {
+    initials = cleaned.slice(0, 2);
+  }
+
+  return initials.toUpperCase();
 }

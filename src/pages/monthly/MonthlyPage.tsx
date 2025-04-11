@@ -20,11 +20,13 @@ import { useQuery } from "@apollo/client";
 import { MoveRight, TrendingDown, TrendingUp } from "lucide-react";
 import { Bar, BarChart, XAxis } from "recharts";
 import TransactionsTable from "@/features/auth/transactions/components/table/transaction-table";
-import { Transaction } from "@/graphql/__generated__/graphql";
+import { FlowResponse, Transaction } from "@/graphql/__generated__/graphql";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { MonthlyFlow } from "@/features/monthly";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GET_FLOW } from "@/graphql/queries/getFlow";
+import { ReactFlowProvider } from "@xyflow/react";
 
 const chartConfig = {
   desktop: {
@@ -35,6 +37,13 @@ const chartConfig = {
 const MonthlyPage = () => {
   const { selectedMonth } = useActiveMonths();
   const { error, data, loading } = useQuery(GET_STATS, {
+    variables: {
+      startDate: selectedMonth?.start,
+      endDate: selectedMonth?.end,
+    },
+    skip: !selectedMonth,
+  });
+  const flowQuery = useQuery(GET_FLOW, {
     variables: {
       startDate: selectedMonth?.start,
       endDate: selectedMonth?.end,
@@ -75,13 +84,16 @@ const MonthlyPage = () => {
   }
 
   return (
-    <Layout title="Monthly">
-      <div className="flex w-full items-center justify-between">
-        <h1 className="text-xl">{selectedMonth?.name} Overview</h1>
-        <ActiveMonthSelector />
-      </div>
+    <Layout
+      title={
+        <div className="flex w-full items-center justify-between">
+          <h1 className="text-xl">{selectedMonth?.name} Overview</h1>
+          <ActiveMonthSelector />
+        </div>
+      }
+    >
       <div className="flex gap-4">
-        <Card className="w-1/4">
+        <Card className="w-1/3">
           <CardHeader>
             <CardTitle className="flex justify-between text-sm">
               <h2 className="text-lg">Cash Flow</h2>
@@ -129,9 +141,7 @@ const MonthlyPage = () => {
             </ChartContainer>
           </CardContent>
         </Card>
-        {/* <Card className="w-1/4"></Card>
-        <Card className="w-1/4"></Card> */}
-        <Card className="w-1/4">
+        <Card className="w-1/3">
           <CardHeader>
             <CardTitle className="flex justify-between text-sm">
               <h2 className="text-lg">Savings</h2>
@@ -172,44 +182,42 @@ const MonthlyPage = () => {
           </CardFooter>
         </Card>
       </div>
-      <h1 className="text-xl">Monthly Flow</h1>
-      <Card className="">
-        <MonthlyFlow />
-      </Card>
+      {/* <h1 className="text-xl">Monthly Flow</h1> */}
+      {/* <Card> */}
+      <ReactFlowProvider>
+        <MonthlyFlow
+          flow={flowQuery?.data?.flow as FlowResponse}
+          loading={flowQuery.loading}
+        />
+      </ReactFlowProvider>
+      {/* </Card> */}
       {/* <div>More trends here. How about bills/utilities?</div>
       <div>Focus group like groceries</div>
       <div>Unusual spending</div>
       <div>this month vs the past 6 months, or this month last year?</div> */}
-      <h1 className="text-xl">Transactions</h1>
-      <Card>
-        <CardHeader>
-          <Tabs
-            defaultValue="income"
-            className="flex flex-col w-full items-center"
-          >
-            <TabsList className="grid grid-cols-2 w-[400px]">
-              <TabsTrigger value="income">Income</TabsTrigger>
-              <TabsTrigger value="spending">Spending</TabsTrigger>
-            </TabsList>
-            <TabsContent value="income" className="w-full">
-              <TransactionsTable
-                data={incomeTransactions}
-                totalRows={totalIncomeTransactions}
-                fetchPage={() => {}}
-                loading={loading}
-              />
-            </TabsContent>
-            <TabsContent value="spending" className="w-full">
-              <TransactionsTable
-                data={spendingTransactions}
-                totalRows={totalSpendingTransactions}
-                fetchPage={() => {}}
-                loading={loading}
-              />
-            </TabsContent>
-          </Tabs>
-        </CardHeader>
-      </Card>
+      {/* <h1 className="text-xl">Transactions</h1> */}
+      <Tabs defaultValue="income" className="flex flex-col w-full items-center">
+        <TabsList className="grid grid-cols-2 w-[400px]">
+          <TabsTrigger value="income">Income</TabsTrigger>
+          <TabsTrigger value="spending">Spending</TabsTrigger>
+        </TabsList>
+        <TabsContent value="income" className="w-full">
+          <TransactionsTable
+            data={incomeTransactions}
+            totalRows={totalIncomeTransactions}
+            fetchPage={() => {}}
+            loading={loading}
+          />
+        </TabsContent>
+        <TabsContent value="spending" className="w-full">
+          <TransactionsTable
+            data={spendingTransactions}
+            totalRows={totalSpendingTransactions}
+            fetchPage={() => {}}
+            loading={loading}
+          />
+        </TabsContent>
+      </Tabs>
     </Layout>
   );
 };

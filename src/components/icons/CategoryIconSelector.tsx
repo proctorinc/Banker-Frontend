@@ -11,42 +11,12 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { Check, PlusCircle } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_TRANSACTION_CATEGORY } from "@/graphql/mutations/updateTransactionCategory";
 import { GET_TRANSACTION_CATEGORIES } from "@/graphql/queries/getTransactionCategories";
-
-// const categories: TransactionCategory[] = [
-//   {
-//     id: "1",
-//     name: "Transfer",
-//     icon: "transfer-icon",
-//     isTransfer: true,
-//     color: "",
-//   },
-//   {
-//     id: "2",
-//     name: "Income",
-//     icon: "income-icon",
-//     isTransfer: false,
-//     color: "",
-//   },
-//   {
-//     id: "3",
-//     name: "Monthly budget",
-//     icon: "budget-icon",
-//     isTransfer: false,
-//     color: "",
-//   },
-//   {
-//     id: "4",
-//     name: "One time Purchase",
-//     icon: "one-time-icon",
-//     isTransfer: false,
-//     color: "",
-//   },
-// ];
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type Props = {
   transactionId: string;
@@ -56,31 +26,61 @@ type Props = {
 const CategoryIconSelector: FC<Props> = ({ transactionId, category }) => {
   const { data, loading } = useQuery(GET_TRANSACTION_CATEGORIES);
   const [updateCategory] = useMutation(UPDATE_TRANSACTION_CATEGORY);
-  const [selectedIcon, setSelectedIcon] = useState<string | undefined>(
-    category?.icon,
-  );
+  const [selectedCategory, setSelectedCategory] =
+    useState<TransactionCategory | null>(category ?? null);
   const [open, setOpen] = useState(false);
 
-  const Icon = getCategoryIcon(selectedIcon);
+  const icon = selectedCategory?.icon ?? category?.icon;
+
+  const Icon = getCategoryIcon(icon);
   const categories = data?.transactionCategories;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          className="h-6"
-          variant="ghost"
-          role="combobox"
-          aria-expanded={open}
-          disabled={loading}
-        >
-          {selectedIcon ? <Icon /> : <PlusCircle />}
-        </Button>
+      <PopoverTrigger>
+        {!selectedCategory && (
+          <Tooltip>
+            <TooltipContent side="right">
+              {!selectedCategory && "Select Category"}
+              {!!selectedCategory && selectedCategory.name}
+            </TooltipContent>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant={"secondary"}
+                role="combobox"
+                aria-expanded={open}
+                disabled={loading}
+              >
+                <Icon size={25} className="text-gray-400" />
+              </Button>
+            </TooltipTrigger>
+          </Tooltip>
+        )}
+        {selectedCategory && (
+          <Tooltip>
+            <TooltipContent side="right">
+              {!selectedCategory && "Select Category"}
+              {selectedCategory && selectedCategory.name}
+            </TooltipContent>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                role="combobox"
+                aria-expanded={open}
+                disabled={loading}
+              >
+                <Icon size={25} />
+              </Button>
+            </TooltipTrigger>
+          </Tooltip>
+        )}
       </PopoverTrigger>
       <PopoverContent className="absolute -left-10 w-[200px] p-0 max-h-[400px] overflow-y-scroll">
         <Command>
           {categories && categories.length > 10 && (
-            <CommandInput className="h-9" defaultValue={category?.icon} />
+            <CommandInput className="h-9" />
           )}
           <CommandList>
             <CommandEmpty>No category</CommandEmpty>
@@ -91,11 +91,13 @@ const CategoryIconSelector: FC<Props> = ({ transactionId, category }) => {
                   return (
                     <CommandItem
                       key={category.id}
-                      value={category.icon}
+                      value={category.id}
                       onSelect={(currentValue) => {
-                        setSelectedIcon(
-                          currentValue === selectedIcon ? "" : currentValue,
-                        );
+                        const item =
+                          categories.find(
+                            (category) => category.id === currentValue,
+                          ) ?? null;
+                        setSelectedCategory(item as TransactionCategory);
                         setOpen(false);
                         updateCategory({
                           variables: {
@@ -110,14 +112,33 @@ const CategoryIconSelector: FC<Props> = ({ transactionId, category }) => {
                       <Check
                         className={cn(
                           "ml-auto",
-                          selectedIcon === category.icon
-                            ? "opacity-100"
-                            : "opacity-0",
+                          icon === category.icon ? "opacity-100" : "opacity-0",
                         )}
                       />
                     </CommandItem>
                   );
                 })}
+              <CommandItem
+                value={undefined}
+                onSelect={() => {
+                  setSelectedCategory(null);
+                  setOpen(false);
+                  updateCategory({
+                    variables: {
+                      transactionIds: [transactionId],
+                      categoryId: undefined,
+                    },
+                  });
+                }}
+              >
+                No category
+                <Check
+                  className={cn(
+                    "ml-auto",
+                    icon === undefined ? "opacity-100" : "opacity-0",
+                  )}
+                />
+              </CommandItem>
             </CommandGroup>
           </CommandList>
         </Command>

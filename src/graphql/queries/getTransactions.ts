@@ -19,9 +19,17 @@ export const GET_TRANSACTIONS = gql(`
                 icon
             }
             merchant {
-              id
-              name
-              sourceId
+                id
+                name
+                sourceId
+                logoUrl
+                linkedAccountId
+                isPrimaryIncome
+                linkedCategory {
+                    name
+                    color
+                    icon
+                }
             }
           }
           cursor

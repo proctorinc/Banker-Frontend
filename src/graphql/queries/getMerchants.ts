@@ -6,9 +6,16 @@ export const GET_MERCHANTS = gql(`
             edges {
                 node {
                     id
-                    name
-                    sourceId
-                    ownerId
+                      name
+                      sourceId
+                      logoUrl
+                      linkedAccountId
+                      isPrimaryIncome
+                      linkedCategory {
+                          name
+                          color
+                          icon
+                      }
                     keys {
                         id
                         keyMatch

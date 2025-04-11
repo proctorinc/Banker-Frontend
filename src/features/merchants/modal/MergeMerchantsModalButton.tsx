@@ -33,12 +33,14 @@ const MergeMerchantsModalButton: FC<Props> = ({ merchants }) => {
     submitForm,
     selectedMerchants,
     setSelectedMerchants,
+    setSelectedKeys,
     loading,
   } = useMergeMerchantsForm();
 
   function toggleModal(open: boolean) {
     if (open === true) {
       setSelectedMerchants(merchants);
+      setSelectedKeys(merchants.map((merchant) => merchant.keys).flat());
       setName(merchants[0].name);
     }
     setOpen(open);
@@ -49,6 +51,7 @@ const MergeMerchantsModalButton: FC<Props> = ({ merchants }) => {
     setOpen(false);
     setName("");
     setSelectedMerchants([]);
+    setSelectedKeys([]);
   }
 
   if (loading) {

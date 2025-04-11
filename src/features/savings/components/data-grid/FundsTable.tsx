@@ -1,13 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { useSavingsPage } from "../../hooks/useSavingsPage";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/utils/utils";
 import { MoveRight, TrendingDown, TrendingUp } from "lucide-react";
@@ -16,6 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Logo } from "@/components/logo/Logo";
 
 export const FundsTable = () => {
   const { data } = useSavingsPage();
@@ -31,22 +25,24 @@ export const FundsTable = () => {
   }
 
   return (
-    <div className="border rounded-md overflow-hidden">
+    <div className="border rounded-xl overflow-hidden">
       <Table className="border-collapse rounded-xl">
-        <TableHeader className="bg-gray-50">
+        {/* <TableHeader className="bg-gray-50">
           <TableRow>
             <TableHead className="flex-2">Name</TableHead>
             <TableHead className="w-[400px]">Goal</TableHead>
             <TableHead className="text-right">This month</TableHead>
             <TableHead className="text-right">Total</TableHead>
           </TableRow>
-        </TableHeader>
+        </TableHeader> */}
         <TableBody>
           {data?.funds.edges.map((edge) => {
             const fund = edge.node;
             return (
               <TableRow key={fund.id}>
-                <TableCell className="font-medium">{fund.name}</TableCell>
+                <TableCell className="flex items-center gap-2 font-medium whitespace-nowrap">
+                  <Logo name={fund.name} /> {fund.name}
+                </TableCell>
                 <TableCell>
                   {!!fund.goal && (
                     <Tooltip>
@@ -59,7 +55,7 @@ export const FundsTable = () => {
                       </TooltipContent>
                       <TooltipTrigger asChild>
                         <Progress
-                          className="max-w-[200px]"
+                          className="w-[200px]"
                           value={(fund.total / fund.goal) * 100}
                         />
                       </TooltipTrigger>

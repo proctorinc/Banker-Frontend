@@ -40,7 +40,7 @@ export const useSidebarContent = () => {
         open: true,
         items: currentUser.accounts.edges.map(({ node: account }) => {
           return {
-            title: account.name,
+            account: account,
             url: `/account/${account.id}`,
             isActive: pathname === `/account/${account.id}`,
             warning: isDaysOld(new Date(account.lastSync.date), 30),
